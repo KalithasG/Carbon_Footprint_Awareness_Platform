@@ -1,0 +1,3830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carbon Footprint Awareness Platform</title>
+  <!-- Main System Font Resource -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Design Tokens: Google Financial Apps Palette & Material Design 3 */
+    :root {
+      --background-surface: #F8F9FA;
+      --surface-card: #FFFFFF;
+      --primary-brand: #1A73E8; /* Google Blue / Trust Anchor */
+      --secondary-core: #0D1B2A; /* Deep Navy / Financial Authority */
+      --text-charcoal: #202124;
+      --text-medium-grey: #3C4043;
+      --success-green: #0F9D58; /* Neutral Positive Green */
+      --success-light: #E6F4EA;
+      --border-gray: #DADCE0;
+      --shadow-sm: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+      --shadow-md: 0 1px 3px 0 rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15);
+      --shadow-lg: 0 2px 6px 2px rgba(60,64,67,0.15), 0 6px 10px 4px rgba(60,64,67,0.3);
+      --transition-standard: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: var(--background-surface);
+      color: var(--text-charcoal);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 80px;
+    }
+
+    /* Skip Navigation Link for Screen Readers (A11y) */
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: 0;
+      background: var(--primary-brand);
+      color: white;
+      padding: 10px 20px;
+      z-index: 1000;
+      text-decoration: none;
+      font-weight: 500;
+      border-radius: 0 0 4px 4px;
+      transition: top 0.2s ease;
+    }
+
+    .skip-link:focus {
+      top: 0;
+    }
+
+    /* Page Navigation & Headers */
+    header {
+      background-color: var(--surface-card);
+      border-bottom: 1px solid var(--border-gray);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
+    }
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-block {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 24px;
+      height: 24px;
+      fill: var(--primary-brand);
+    }
+
+    .logo-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16pt;
+      font-weight: 700;
+      color: var(--secondary-core);
+      letter-spacing: -0.5px;
+    }
+
+    /* A11y & Retention Reading Progress Bar */
+    .reading-progress-container {
+      width: 100%;
+      height: 4px;
+      background-color: #E8EAED;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
+
+    .reading-progress-bar {
+      height: 100%;
+      width: 0%;
+      background-color: var(--primary-brand);
+      transition: width 0.1s ease-out;
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 16px;
+    }
+
+    .nav-btn {
+      background: none;
+      border: none;
+      color: var(--text-medium-grey);
+      font-size: 10.5pt;
+      font-weight: 500;
+      padding: 8px 12px;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: var(--transition-standard);
+      text-decoration: none;
+    }
+
+    .nav-btn:hover, .nav-btn:focus {
+      background-color: #F1F3F4;
+      color: var(--primary-brand);
+      outline: none;
+    }
+
+    .nav-btn:focus-visible {
+      outline: 2px solid var(--primary-brand);
+    }
+
+    /* Main Container with fluid limits */
+    main {
+      max-width: 1200px;
+      margin: 32px auto 0 auto;
+      padding: 0 24px;
+    }
+
+    /* General Typography Guidelines */
+    h1 {
+      font-size: 22pt;
+      font-weight: 700;
+      color: var(--secondary-core);
+      line-height: 1.3;
+      margin-bottom: 12px;
+    }
+
+    h2 {
+      font-size: 14pt;
+      font-weight: 700;
+      color: var(--primary-brand);
+      border-left: 4px solid var(--primary-brand);
+      padding-left: 12px;
+      margin-top: 40px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+    }
+
+    h3 {
+      font-size: 12pt;
+      font-weight: 500;
+      color: var(--secondary-core);
+      margin-bottom: 8px;
+    }
+
+    p {
+      font-size: 10.5pt;
+      color: var(--text-medium-grey);
+      text-align: justify;
+      margin-bottom: 16px;
+    }
+
+    .hero-panel {
+      background-color: var(--surface-card);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: var(--shadow-sm);
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 40px;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+
+    @media (max-width: 900px) {
+      .hero-panel {
+        grid-template-columns: 1fr;
+        padding: 24px;
+        gap: 24px;
+      }
+    }
+
+    .hero-pill {
+      display: inline-block;
+      background-color: #E8F0FE;
+      color: var(--primary-brand);
+      padding: 6px 16px;
+      border-radius: 100px;
+      font-size: 9pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+
+    .hero-badge {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      background-color: var(--background-surface);
+      border-radius: 12px;
+      border-left: 4px solid var(--success-green);
+      margin-top: 24px;
+    }
+
+    .hero-badge-number {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 24pt;
+      font-weight: 700;
+      color: var(--secondary-core);
+      line-height: 1;
+    }
+
+    .hero-badge-desc {
+      font-size: 9.5pt;
+      color: var(--text-medium-grey);
+    }
+
+    /* HERO VIDEO SLOT STYLES */
+    .hero-video-slot {
+      background-color: #1a1a1a;
+      border-radius: 14px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid var(--border-gray);
+      background-size: cover;
+      background-position: center;
+      aspect-ratio: 21 / 9; /* Cinematic widescreen panorama */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition-standard);
+      grid-column: 1 / -1; /* Scale full width across both grid columns */
+      width: 100%;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .hero-video-slot {
+        aspect-ratio: 16 / 9; /* Scaled video on smaller viewports */
+        margin-bottom: 16px;
+      }
+    }
+
+    .hero-video-slot:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    .video-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    .ambient-video-loop {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: opacity 0.5s ease;
+      opacity: 0;
+    }
+
+    .ambient-video-loop.loaded {
+      opacity: 1;
+    }
+
+    /* Beautiful subtle fallback overlay if video isn't there or is loading */
+    .video-placeholder-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(26, 35, 126, 0.95), rgba(33, 33, 33, 0.95));
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      text-align: center;
+      z-index: 2;
+      color: white;
+      transition: opacity 0.5s ease;
+      pointer-events: none;
+    }
+
+    .ambient-video-loop.loaded ~ .video-placeholder-overlay {
+      opacity: 0;
+    }
+
+    .video-placeholder-icon {
+      color: #90CAF9;
+      margin-bottom: 8px;
+      animation: pulse-video 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse-video {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 0.8;
+      }
+      50% {
+        transform: scale(1.1);
+        opacity: 1;
+      }
+    }
+
+    .video-placeholder-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 11pt;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+      color: #FFFFFF;
+    }
+
+    .video-placeholder-text {
+      font-size: 8.5pt;
+      color: #B0BEC5;
+      max-width: 260px;
+      line-height: 1.4;
+    }
+
+    /* Section Cards with elevation */
+    .section-card {
+      background-color: var(--surface-card);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 32px;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition-standard);
+    }
+
+    /* Scroll Animation Transition States */
+    .animate-on-scroll {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+
+    .animate-on-scroll.appear {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .animate-on-scroll {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
+    }
+
+    /* MODULE 1: Myth vs Reality - CSS 3D Card Flipping Matrix */
+    .myth-reality-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    .flip-card {
+      background-color: transparent;
+      perspective: 1000px;
+      height: 250px;
+      cursor: pointer;
+    }
+
+    /* Staggered delays for Myth vs. Reality flip cards entrance animation */
+    .myth-reality-grid .flip-card:nth-of-type(1) { transition-delay: 0.1s; }
+    .myth-reality-grid .flip-card:nth-of-type(2) { transition-delay: 0.25s; }
+    .myth-reality-grid .flip-card:nth-of-type(3) { transition-delay: 0.4s; }
+    .myth-reality-grid .flip-card:nth-of-type(4) { transition-delay: 0.55s; }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+      border-radius: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .flip-card:focus-visible .flip-card-inner,
+    .flip-card.flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    /* Focus highlight for accessibiliy */
+    .flip-card:focus-visible {
+      outline: 2px solid var(--primary-brand);
+      border-radius: 16px;
+    }
+
+    .flip-card-front, .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .flip-card-front {
+      background-color: var(--secondary-core);
+      color: white;
+    }
+
+    .flip-card-front h4 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13pt;
+      font-weight: 700;
+      color: #90CAF9;
+      text-align: left;
+    }
+
+    .flip-card-front p {
+      color: #E8EAED;
+      text-align: left;
+      font-size: 10pt;
+      margin-top: 12px;
+    }
+
+    .flip-card-back {
+      background-color: var(--surface-card);
+      color: var(--text-charcoal);
+      transform: rotateY(180deg);
+      border: 1px solid var(--border-gray);
+    }
+
+    .flip-card-back h4 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13pt;
+      font-weight: 700;
+      color: var(--success-green);
+      text-align: left;
+    }
+
+    .flip-card-back p {
+      color: var(--text-medium-grey);
+      text-align: left;
+      font-size: 9.5pt;
+      margin-top: 12px;
+      overflow-y: auto;
+    }
+
+    .card-footer-tip {
+      font-size: 8pt;
+      color: #70757A;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      text-align: right;
+    }
+
+    .flip-card-front .card-footer-tip {
+      color: #BDC1C6;
+    }
+
+    /* MODULE 2: The Science - Math Normalizer Cascade */
+    .cascade-container {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 32px;
+      margin-top: 24px;
+      background-color: var(--background-surface);
+      padding: 24px;
+      border-radius: 12px;
+      align-items: center;
+    }
+
+    @media (max-width: 800px) {
+      .cascade-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .gas-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .gas-selector {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .gas-btn {
+      background-color: var(--surface-card);
+      border: 1px solid var(--border-gray);
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      text-align: left;
+      transition: var(--transition-standard);
+    }
+
+    .gas-btn:hover {
+      background-color: #F1F3F4;
+    }
+
+    .gas-btn.active {
+      border-color: var(--primary-brand);
+      background-color: #E8F0FE;
+      box-shadow: 0 0 0 1px var(--primary-brand);
+    }
+
+    .gas-name {
+      font-size: 11pt;
+      font-weight: 700;
+      color: var(--secondary-core);
+    }
+
+    .gas-formula {
+      font-size: 9pt;
+      color: var(--text-medium-grey);
+    }
+
+    .mass-input-container {
+      margin-top: 16px;
+    }
+
+    .mass-slider-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10pt;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .mass-slider {
+      width: 100%;
+      accent-color: var(--primary-brand);
+      cursor: pointer;
+    }
+
+    .cascade-viz {
+      background-color: var(--surface-card);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 280px;
+    }
+
+    /* SVG multiplier styles */
+    .viz-svg {
+      width: 100%;
+      height: 180px;
+    }
+
+    .viz-formula-display {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14pt;
+      font-weight: 700;
+      margin-top: 16px;
+      color: var(--secondary-core);
+      text-align: center;
+    }
+
+    /* MODULE 3: Corporate Scopes Tab Explorer */
+    .tabs-container {
+      margin-top: 24px;
+    }
+
+    .tabs-list {
+      display: flex;
+      border-bottom: 1px solid var(--border-gray);
+      margin-bottom: 20px;
+      gap: 8px;
+    }
+
+    .tab-trigger {
+      background: none;
+      border: none;
+      padding: 12px 24px;
+      font-size: 11pt;
+      font-weight: 500;
+      color: var(--text-medium-grey);
+      cursor: pointer;
+      position: relative;
+      transition: var(--transition-standard);
+      border-radius: 8px 8px 0 0;
+    }
+
+    .tab-trigger:hover {
+      background-color: #F1F3F4;
+      color: var(--secondary-core);
+    }
+
+    .tab-trigger.active {
+      color: var(--primary-brand);
+      font-weight: 700;
+    }
+
+    .tab-trigger.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background-color: var(--primary-brand);
+      border-radius: 3px;
+    }
+
+    .tab-trigger:focus-visible {
+      outline: 2px solid var(--primary-brand);
+      outline-offset: -2px;
+    }
+
+    .scope-panel-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 32px;
+    }
+
+    @media (max-width: 800px) {
+      .scope-panel-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+    }
+
+    .scope-indicators {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .indicator-row {
+      background-color: var(--background-surface);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: var(--transition-standard);
+      border-left: 4px solid var(--border-gray);
+    }
+
+    .indicator-row.active-row {
+      border-left-color: var(--primary-brand);
+      background-color: #E8F0FE;
+    }
+
+    .indicator-label {
+      font-size: 10pt;
+      font-weight: 500;
+      color: var(--text-charcoal);
+    }
+
+    .indicator-val {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 11pt;
+      font-weight: 700;
+      color: var(--secondary-core);
+    }
+
+    .scope-detail-pane {
+      background-color: var(--background-surface);
+      border-radius: 12px;
+      padding: 24px;
+      border: 1px solid var(--border-gray);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .scope-badge {
+      display: inline-block;
+      align-self: flex-start;
+      background-color: var(--secondary-core);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 8.5pt;
+      font-weight: 700;
+    }
+
+    .scope-asset-label {
+      font-size: 11pt;
+      font-weight: 700;
+      color: var(--secondary-core);
+    }
+
+    .scope-description {
+      font-size: 10pt;
+      color: var(--text-medium-grey);
+    }
+
+    .impact-meter {
+      height: 8px;
+      background-color: #DADCE0;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .impact-fill {
+      height: 100%;
+      background-color: #E67C73;
+      border-radius: 4px;
+      transition: width 0.4s ease-out;
+    }
+
+    /* MODULE 4: Macroeconomic Global Statistics Section */
+    .stats-explorer {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-top: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .stats-explorer {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .data-control-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .toggle-group {
+      display: inline-flex;
+      background-color: #E8EAED;
+      border-radius: 8px;
+      padding: 4px;
+      align-self: flex-start;
+    }
+
+    .toggle-choice {
+      background: none;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 9.5pt;
+      font-weight: 500;
+      color: var(--text-medium-grey);
+      transition: var(--transition-standard);
+    }
+
+    .toggle-choice.active {
+      background-color: var(--surface-card);
+      color: var(--primary-brand);
+      font-weight: 700;
+      box-shadow: 0 1px 3px rgba(60,64,67,0.15);
+    }
+
+    .svg-chart-container {
+      background-color: var(--background-surface);
+      border-radius: 12px;
+      padding: 16px;
+      border: 1px solid var(--border-gray);
+      height: 320px;
+    }
+
+    .table-container {
+      background-color: var(--surface-card);
+      border: 1px solid var(--border-gray);
+      border-radius: 12px;
+      overflow: hidden;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      box-shadow: var(--shadow-sm);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th {
+      background-color: var(--secondary-core);
+      color: white;
+      font-size: 9.5pt;
+      font-weight: 700;
+      padding: 14px 16px;
+      cursor: pointer;
+      user-select: none;
+      position: relative;
+    }
+
+    th:hover {
+      background-color: #172F4C;
+    }
+
+    th.sort-active::after {
+      content: ' ▼';
+      font-size: 8px;
+    }
+
+    th.sort-active.ascending::after {
+      content: ' ▲';
+    }
+
+    td {
+      padding: 12px 16px;
+      font-size: 10pt;
+      color: var(--text-charcoal);
+      border-bottom: 1px solid var(--border-gray);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover {
+      background-color: #F8F9FA;
+    }
+
+    .category-tooltip-trigger {
+      border-bottom: 1px dashed var(--text-medium-grey);
+      cursor: help;
+      display: inline-block;
+      transition: color var(--transition-standard), border-color var(--transition-standard);
+    }
+
+    .category-tooltip-trigger:hover,
+    .category-tooltip-trigger:focus-visible {
+      color: var(--primary-brand);
+      border-bottom-color: var(--primary-brand);
+      outline: none;
+    }
+
+    .table-row-tooltip {
+      position: absolute;
+      background-color: var(--secondary-core);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 8.5pt;
+      font-weight: 500;
+      box-shadow: var(--shadow-md);
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1000;
+      max-width: 260px;
+      line-height: var(--line-height-relaxed);
+      transform: translateY(4px);
+      text-align: left;
+    }
+
+    .table-row-tooltip.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .download-summary-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--primary-brand);
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      font-size: 9.5pt;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'Space Grotesk', sans-serif;
+      transition: background-color var(--transition-standard), transform var(--transition-standard), box-shadow var(--transition-standard);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .download-summary-btn:hover {
+      background-color: var(--secondary-core);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-1px);
+    }
+
+    .download-summary-btn:active {
+      transform: translateY(1px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .download-summary-btn:focus-visible {
+      outline: 2px solid var(--primary-brand);
+      outline-offset: 2px;
+    }
+
+    /* CONCEPT CHECK QUIZ MODULE STYLES (Material 3 standard) */
+    .quiz-container {
+      max-width: 800px;
+      margin: 24px auto 0 auto;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .quiz-header-status {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-gray);
+      padding-bottom: 16px;
+    }
+
+    .quiz-progress-info {
+      font-size: 10pt;
+      font-weight: 500;
+      color: var(--text-medium-grey);
+    }
+
+    .quiz-progress-indicators {
+      display: flex;
+      gap: 8px;
+    }
+
+    .quiz-indicator-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: var(--border-gray);
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .quiz-indicator-dot.active {
+      background-color: var(--primary-brand);
+      transform: scale(1.2);
+    }
+
+    .quiz-indicator-dot.correct {
+      background-color: var(--success-green);
+    }
+
+    .quiz-indicator-dot.incorrect {
+      background-color: #D93025; /* Red standard */
+    }
+
+    .quiz-question-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13pt;
+      font-weight: 700;
+      line-height: var(--line-height-relaxed);
+      color: var(--secondary-core);
+      margin-bottom: 16px;
+      text-align: left;
+    }
+
+    .quiz-options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .quiz-option-button {
+      background-color: var(--surface-card);
+      border: 1.5px solid var(--border-gray);
+      border-radius: 12px;
+      padding: 16px 20px;
+      cursor: pointer;
+      text-align: left;
+      font-size: 10.5pt;
+      color: var(--text-charcoal);
+      transition: var(--transition-standard);
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .quiz-option-button:hover:not(.locked) {
+      background-color: #F8F9FA;
+      border-color: var(--primary-brand);
+      transform: translateY(-1px);
+    }
+
+    .quiz-option-button:focus-visible:not(.locked) {
+      outline: 3.5px solid var(--primary-brand);
+      outline-offset: 2.5px;
+    }
+
+    .quiz-option-letter {
+      background-color: #F1F3F4;
+      color: var(--secondary-core);
+      font-weight: 700;
+      font-size: 9.5pt;
+      min-width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: var(--transition-standard);
+    }
+
+    .quiz-option-text {
+      flex-grow: 1;
+      line-height: 1.5;
+    }
+
+    /* Selected state */
+    .quiz-option-button.selected {
+      border-color: var(--primary-brand);
+      background-color: #E8F0FE;
+    }
+
+    .quiz-option-button.selected .quiz-option-letter {
+      background-color: var(--primary-brand);
+      color: white;
+    }
+
+    /* Checked Correct state */
+    .quiz-option-button.is-correct {
+      border-color: var(--success-green);
+      background-color: var(--success-light);
+    }
+
+    .quiz-option-button.is-correct .quiz-option-letter {
+      background-color: var(--success-green);
+      color: white;
+    }
+
+    /* Checked Incorrect state */
+    .quiz-option-button.is-incorrect {
+      border-color: #D93025;
+      background-color: #FCE8E6;
+    }
+
+    .quiz-option-button.is-incorrect .quiz-option-letter {
+      background-color: #D93025;
+      color: white;
+    }
+
+    /* Locked state */
+    .quiz-option-button.locked {
+      cursor: default;
+      opacity: 0.65;
+    }
+
+    .quiz-option-button.locked.is-correct,
+    .quiz-option-button.locked.is-incorrect {
+      opacity: 1 !important;
+    }
+
+    .quiz-feedback-panel {
+      background-color: var(--background-surface);
+      border-left: 4px solid var(--primary-brand);
+      border-radius: 0 12px 12px 0;
+      padding: 18px 24px;
+      margin-top: 20px;
+      text-align: left;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+      display: none;
+    }
+
+    .quiz-feedback-panel.visible {
+      opacity: 1;
+      transform: translateY(0);
+      display: block;
+    }
+
+    .quiz-feedback-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 11pt;
+      margin-bottom: 8px;
+    }
+
+    .quiz-feedback-header.success {
+      color: var(--success-green);
+    }
+
+    .quiz-feedback-header.error {
+      color: #D93025;
+    }
+
+    .quiz-feedback-explanation {
+      font-size: 10pt;
+      color: var(--text-medium-grey);
+      line-height: var(--line-height-relaxed);
+      margin-bottom: 16px;
+      text-align: left;
+    }
+
+    /* Next trigger action */
+    .quiz-action-button {
+      background-color: var(--secondary-core);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 10pt;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: var(--transition-standard);
+    }
+
+    .quiz-action-button:hover {
+      background-color: var(--primary-brand);
+      transform: translateY(-1px);
+    }
+
+    .quiz-action-button:active {
+      transform: translateY(1px);
+    }
+
+    /* Final results panel */
+    .quiz-results-panel {
+      text-align: center;
+      padding: 16px 0;
+    }
+
+    .quiz-results-score-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      background-color: #E8F0FE;
+      color: var(--primary-brand);
+      margin-bottom: 20px;
+      border: 4px solid var(--primary-brand);
+    }
+
+    .quiz-results-score-value {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 28pt;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .quiz-results-score-label {
+      font-size: 9pt;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-medium-grey);
+    }
+
+    .quiz-results-heading {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 15pt;
+      font-weight: 700;
+      color: var(--secondary-core);
+      margin-bottom: 8px;
+    }
+
+    .quiz-results-text {
+      font-size: 10.5pt;
+      color: var(--text-medium-grey);
+      max-width: 520px;
+      margin: 0 auto 24px auto;
+      line-height: var(--line-height-relaxed);
+    }
+
+    /* MODULE 5: Case Studies Grid Array */
+    .case-studies-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    .case-card {
+      background-color: var(--surface-card);
+      border: 1px solid var(--border-gray);
+      border-radius: 12px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: var(--transition-standard);
+    }
+
+    .case-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .case-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .case-target {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 11pt;
+      font-weight: 700;
+      color: var(--primary-brand);
+    }
+
+    .case-result-badge {
+      background-color: var(--success-light);
+      color: var(--success-green);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 9.5pt;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    .case-caption {
+      font-size: 10pt;
+      color: var(--text-medium-grey);
+      margin-bottom: 16px;
+      flex-grow: 1;
+    }
+
+    .case-cta-btn {
+      align-self: flex-start;
+      background-color: var(--secondary-core);
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 9.5pt;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: var(--transition-standard);
+    }
+
+    .case-cta-btn:hover {
+      background-color: var(--primary-brand);
+    }
+
+    .case-cta-btn:focus-visible {
+      outline: 2px solid var(--primary-brand);
+      outline-offset: 2px;
+    }
+
+    /* Modal / Progressive Disclosure Styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(32,33,36,0.6);
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-container {
+      background-color: var(--surface-card);
+      border-radius: 16px;
+      max-width: 650px;
+      width: 90%;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-lg);
+      transform: scale(0.95);
+      transition: transform 0.25s ease;
+    }
+
+    .modal-overlay.active .modal-container {
+      transform: scale(1);
+    }
+
+    .modal-header {
+      padding: 24px;
+      border-bottom: 1px solid var(--border-gray);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14pt;
+      font-weight: 700;
+      color: var(--secondary-core);
+    }
+
+    .modal-close-btn {
+      background: none;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: var(--transition-standard);
+    }
+
+    .modal-close-btn:hover {
+      background-color: #F1F3F4;
+    }
+
+    .modal-body {
+      padding: 24px;
+      overflow-y: auto;
+    }
+
+    .modal-body h4 {
+      font-size: 11pt;
+      font-weight: 700;
+      color: var(--primary-brand);
+      margin-top: 16px;
+      margin-bottom: 8px;
+    }
+
+    .modal-body p {
+      margin-bottom: 12px;
+      font-size: 10.2pt;
+    }
+
+    .modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border-gray);
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .modal-dismiss-btn {
+      background-color: var(--primary-brand);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 9.5pt;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    /* Interactive UI Accessibility Focus Style */
+    input:focus-visible, button:focus-visible {
+      outline: 3px solid var(--primary-brand);
+    }
+
+    footer {
+      background-color: var(--secondary-core);
+      color: white;
+      padding: 48px 24px;
+      margin-top: 64px;
+    }
+
+    .footer-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .footer-desc h3 {
+      color: #90CAF9;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14pt;
+      margin-bottom: 12px;
+    }
+
+    .footer-desc p {
+      color: #DADCE0;
+      font-size: 9.5pt;
+    }
+
+    /* Circular Economy Loops High-Fidelity Styles */
+    .circular-economy-container {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 32px;
+      margin-top: 24px;
+      align-items: center;
+      background-color: var(--background-surface);
+      padding: 24px;
+      border-radius: 12px;
+    }
+
+    @media (max-width: 900px) {
+      .circular-economy-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .circ-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .circ-stages {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .circ-stage-btn {
+      background-color: var(--surface-card);
+      border: 1px solid var(--border-gray);
+      border-radius: 12px;
+      padding: 14px 18px;
+      cursor: pointer;
+      text-align: left;
+      transition: var(--transition-standard);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .circ-stage-btn:hover {
+      background-color: #F1F3F4;
+    }
+
+    .circ-stage-btn.active {
+      border-color: var(--success-green);
+      background-color: var(--success-light);
+      box-shadow: 0 0 0 1px var(--success-green);
+    }
+
+    .circ-stage-num {
+      width: 24px;
+      height: 24px;
+      background-color: var(--secondary-core);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 9.5pt;
+      font-weight: 700;
+      flex-shrink: 0;
+      transition: var(--transition-standard);
+    }
+
+    .circ-stage-btn.active .circ-stage-num {
+      background-color: var(--success-green);
+    }
+
+    .circ-stage-text-block {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .circ-stage-title {
+      font-size: 10.5pt;
+      font-weight: 700;
+      color: var(--secondary-core);
+    }
+
+    .circ-stage-subtitle {
+      font-size: 8.5pt;
+      color: var(--text-medium-grey);
+    }
+
+    .circ-viz {
+      background-color: var(--surface-card);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 320px;
+    }
+
+    .circ-loop-svg {
+      width: 100%;
+      height: 220px;
+      overflow: visible;
+    }
+
+    .circ-node-circle {
+      transition: r 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), fill 0.3s ease;
+      cursor: pointer;
+    }
+
+    .circ-node-circle:hover, .circ-node-circle.active {
+      r: 15;
+    }
+
+    /* Path element animations and offsets */
+    .circ-particle {
+      offset-path: path("M 150 40 C 230 40, 230 180, 150 180 C 70 180, 70 40, 150 40");
+      animation: circ-travel 6s linear infinite;
+      will-change: transform;
+    }
+
+    @keyframes circ-travel {
+      0% {
+        offset-distance: 0%;
+      }
+      100% {
+        offset-distance: 100%;
+      }
+    }
+
+    .circ-metric-card {
+      background-color: var(--background-surface);
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-left: 4px solid var(--success-green);
+    }
+
+    /* MODULE 7: Common Questions (Interactive Accordion Component) */
+    .accordion-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 24px;
+      width: 100%;
+    }
+
+    .accordion-item {
+      border: 1px solid #E8EAED;
+      border-radius: 8px;
+      background-color: var(--surface-card);
+      overflow: hidden;
+      transition: border-color var(--transition-standard), box-shadow var(--transition-standard);
+    }
+
+    .accordion-item:hover {
+      border-color: var(--primary-brand);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .accordion-item.active {
+      border-color: var(--primary-brand);
+    }
+
+    .accordion-header {
+      margin: 0;
+      padding: 0;
+    }
+
+    .accordion-trigger {
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 18px 24px;
+      text-align: left;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 11pt;
+      font-weight: 700;
+      color: var(--secondary-core);
+      gap: 16px;
+      outline: none;
+      transition: color var(--transition-standard);
+    }
+
+    .accordion-trigger:focus-visible {
+      background-color: var(--background-surface);
+      box-shadow: inset 0 0 0 2px var(--primary-brand);
+    }
+
+    .accordion-trigger:hover {
+      color: var(--primary-brand);
+    }
+
+    .accordion-icon {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      color: var(--text-medium-grey);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), color var(--transition-standard);
+    }
+
+    .accordion-item.active .accordion-icon {
+      transform: rotate(180deg);
+      color: var(--primary-brand);
+    }
+
+    .accordion-panel {
+      padding: 0 24px;
+    }
+
+    .accordion-content {
+      font-size: 10pt;
+      line-height: var(--line-height-relaxed);
+      color: var(--text-charcoal);
+      padding: 0 0 4px 0;
+    }
+
+    .accordion-content p {
+      margin-bottom: 12px;
+    }
+
+    .accordion-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* BACK TO TOP FLOATING ACTION BUTTON (Material 3 guidelines) */
+    .back-to-top-fab {
+      position: fixed;
+      right: 28px;
+      bottom: 28px;
+      width: 56px;
+      height: 56px;
+      border-radius: 16px; /* Material 3 standard rounded shapes */
+      background-color: var(--secondary-core); /* M3 tonal core filled container */
+      color: #FFFFFF;
+      border: none;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(24px) scale(0.8);
+      transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .back-to-top-fab:hover {
+      background-color: var(--primary-brand); /* Bright brand shift on interaction */
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-4px) scale(1.05);
+    }
+
+    .back-to-top-fab:focus-visible {
+      outline: 3px solid var(--primary-brand);
+      outline-offset: 4px;
+    }
+
+    .back-to-top-fab:active {
+      transform: translateY(0) scale(0.95);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .back-to-top-fab.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0) scale(1);
+    }
+
+    .footer-copyright {
+      border-top: 1px solid #1E2E3E;
+      margin-top: 40px;
+      padding-top: 24px;
+      text-align: center;
+      font-size: 8.5pt;
+      color: #80868B;
+    }
+
+    /* ==========================================================================
+       RESPONSIVE DESIGN SYSTEM OVERRIDES (Desktop/Mobile Dual Compatibility)
+       ========================================================================== */
+    @media (max-width: 800px) {
+      /* General Layout overrides */
+      main {
+        margin-top: 16px;
+        padding: 0 16px;
+      }
+      
+      h1 {
+        font-size: 18pt !important;
+      }
+
+      h2 {
+        font-size: 13pt !important;
+        margin-top: 28px;
+        margin-bottom: 16px;
+      }
+
+      /* Stack global header & transform horizontal nav-menu into touch-slide scrolltrack */
+      .header-container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 12px;
+        padding: 12px 16px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .logo-block {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        gap: 8px;
+        margin-bottom: 2px;
+      }
+
+      .logo-text {
+        font-size: 14pt !important;
+        white-space: nowrap;
+        letter-spacing: -0.3px;
+      }
+
+      .nav-menu {
+        width: 100%;
+        overflow-x: auto;
+        white-space: nowrap;
+        padding-bottom: 6px;
+        margin-bottom: -4px;
+        gap: 8px;
+        display: flex;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none; /* Hide default browser scrollbar scroll */
+      }
+
+      .nav-menu::-webkit-scrollbar {
+        display: none; /* Hide standard Chrome/Safari webkit scrollbar */
+      }
+
+      .nav-btn {
+        flex: 0 0 auto;
+        font-size: 9.5pt;
+        padding: 6px 12px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      /* Fluid panel layouts */
+      .hero-panel, .section-card {
+        padding: 20px !important;
+        border-radius: 12px !important;
+        margin-bottom: 20px !important;
+      }
+
+      /* Stack vertical indicator key-values to avoid overlap on portrait mobile layouts */
+      .indicator-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        padding: 12px;
+      }
+
+      .indicator-val {
+        font-weight: 600;
+        text-align: left;
+      }
+
+      /* Re-shape Toggle Groups to stacked buttons to support narrow widths */
+      .toggle-group {
+        display: flex !important;
+        flex-direction: column;
+        width: 100%;
+        align-self: stretch;
+        gap: 4px;
+      }
+
+      .toggle-choice {
+        width: 100%;
+        text-align: center;
+        padding: 10px 16px;
+      }
+      
+      .download-summary-btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      /* Micro-tuning the dynamic circular loop diagram container height scale */
+      .circ-viz {
+        min-height: 240px !important;
+        padding: 16px !important;
+      }
+
+      .circ-loop-svg {
+        height: 180px;
+      }
+
+      /* Mobile FAB spacing and touch sizing */
+      .back-to-top-fab {
+        right: 16px;
+        bottom: 16px;
+        width: 48px;
+        height: 48px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      /* Extra compact and dense visual corrections */
+      .hero-panel, .section-card {
+        padding: 16px !important;
+      }
+
+      h1 {
+        font-size: 15pt !important;
+      }
+
+      h2 {
+        font-size: 12pt !important;
+      }
+
+      /* Convert Gas buttons grid into clear single-column listing */
+      .gas-selector {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .gas-btn {
+        padding: 12px;
+      }
+
+      /* Make quiz option buttons stack perfectly with touch borders */
+      .quiz-header-status {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .quiz-option-button {
+        padding: 12px 14px !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Screen Reader Skip Navigation Link (A11y Constraint) -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Global Header -->
+  <header>
+    <div class="header-container">
+      <div class="logo-block">
+        <!-- SVG Interactive Carbon atom icon (Creative placeholder, no external deps) -->
+        <svg class="logo-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M12 2a10 10 0 0 1 10 10c0 1.5-.3 3-.9 4.3l-1.5-.9c.5-1 .8-2.2.8-3.4a8 8 0 1 0-8 8c1.2 0 2.4-.3 3.4-.8l.9 1.5c-1.3.6-2.8.9-4.3.9A10 10 0 0 1 12 2z"/>
+        </svg>
+        <span class="logo-text">CarbonAware</span>
+      </div>
+      <nav class="nav-menu" role="navigation" aria-label="Main Navigation">
+        <button class="nav-btn" onclick="scrollToSection('origin-module')" data-testid="nav-origin">Origin</button>
+        <button class="nav-btn" onclick="scrollToSection('science-module')" data-testid="nav-science">Science</button>
+        <button class="nav-btn" onclick="scrollToSection('scopes-module')" data-testid="nav-scopes">Scopes</button>
+        <button class="nav-btn" onclick="scrollToSection('macro-module')" data-testid="nav-macro">Macro Data</button>
+        <button class="nav-btn" onclick="scrollToSection('pathways-module')" data-testid="nav-pathways">Solutions</button>
+        <button class="nav-btn" onclick="scrollToSection('circular-module')" data-testid="nav-circular" style="color: var(--success-green); font-weight: 500;">Circular Loop</button>
+        <button class="nav-btn" onclick="openGlossary()" data-testid="nav-glossary" style="background-color: #E8F0FE; color: var(--primary-brand); font-weight: 600;">Glossary</button>
+      </nav>
+    </div>
+    <!-- Interactive Reading Progress Indicator -->
+    <div class="reading-progress-container">
+      <div id="reading-progress" class="reading-progress-bar" aria-hidden="true"></div>
+    </div>
+  </header>
+
+  <!-- Main Grid Layout -->
+  <main id="main-content">
+    
+    <!-- Immersive Interactive Platform Intro/Hero Section -->
+    <section class="hero-panel animate-on-scroll" aria-labelledby="platform-title">
+      <!-- LOOPING VIDEO CARD (behaved like a GIF) - Spans full grid width -->
+      <div class="video-container" style="position:relative; width:100%; padding-top:56.25%;">
+         <iframe
+           src="https://www.youtube.com/embed/SqoQDFr3jwE?autoplay=1&mute=1&loop=1&playlist=SqoQDFr3jwE&controls=0"
+           frameborder="0"
+           allow="autoplay; fullscreen"
+           style="position:absolute; top:0; left:0; width:100%; height:100%;">
+         </iframe>
+      </div>
+
+      <div>
+        <span class="hero-pill">Awareness & Education</span>
+        <h1 id="platform-title">Unveiling the Hidden Blueprint of Carbon Footprints</h1>
+        <p>Welcome to an immersive data-storytelling suite. Atmospheric carbon has surpassed 420 ppm, transforming terrestrial and oceanic parameters. True transformation requires breaking through historical narratives and structural traps to understand where climate metrics originate.</p>
+        <p>This platform contains NO calculators, and collects no personal commute figures. Instead, it serves to map corporate typologies, unpack systemic dependencies, analyze global statistics, and trace actual, scalable mitigation pathways.</p>
+        <button class="case-cta-btn" onclick="scrollToSection('origin-module')" data-testid="hero-start-btn">
+          Explore Interactive Analysis
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <div class="hero-badge">
+          <div class="hero-badge-number">420+</div>
+          <div class="hero-badge-desc"><strong>Parts Per Million (ppm)</strong><br>Atmospheric CO₂ concentration — unprecedented value in hominid taxonomy.</div>
+        </div>
+        <div class="hero-badge" style="border-left-color: var(--primary-brand);">
+          <div class="hero-badge-number" style="color: var(--primary-brand);">1.5°</div>
+          <div class="hero-badge-desc"><strong>Paris Agreement target threshold (°C)</strong><br>Empirical planetary target margin above pre-industrial levels.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODULE 1: The Awareness Gap (Conceptual Origin) -->
+    <section id="origin-module" class="section-card animate-on-scroll" aria-labelledby="h2-origin">
+      <h2 id="h2-origin">1. The Awareness Gap (Conceptual Origin)</h2>
+      <p>The carbon footprint metric is an essential framework of environmental accounting, yet its lineage is complex. In 2004, the fossil fuel enterprise British Petroleum (BP) commissioned public relations experts Ogilvy & Mather to create a $100 million promotional array. This collection featured the world's first interactive consumer carbon calculator.</p>
+      <p>Climate sociologists observe that this campaign strategically shifted focus from corporate extractors down to individual choices (such as household insulation, dietary variables, and commutes). To develop true climate consciousness, we must resolve this discrepancy: understanding individual agency while recognizing structural infrastructure block-ins.</p>
+
+      <h3 style="margin-top: 24px;">Myth vs. Reality Matrix</h3>
+      <p style="margin-bottom: 12px; font-style: italic;">Select or tap any card below to flip and resolve common public misinterpretations about carbon footprints.</p>
+      
+      <div class="myth-reality-grid">
+        <!-- Flip Card 1 -->
+        <div class="flip-card animate-on-scroll" onclick="flipCard(this)" onkeypress="handleCardKey(event, this)" tabindex="0" role="button" aria-expanded="false" data-testid="myth-card-0">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <h4>Myth #1: The Consumer Pivot</h4>
+              <p>Individual changes and small household offsets are the primary, most powerful levers for modern climate stabilization.</p>
+              <div class="card-footer-tip">Press space or tap to reveal</div>
+            </div>
+            <div class="flip-card-back">
+              <h4>Systemic Reality</h4>
+              <p>While personal dietary and residential changes can subtract tons per year, individual choice is locked inside massive industrial infrastructure. Heavy energy generation, industrial processes, and trade structures represent over 70% of absolute global emissions.</p>
+              <div class="card-footer-tip">Press space or tap to flip back</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Flip Card 2 -->
+        <div class="flip-card animate-on-scroll" onclick="flipCard(this)" onkeypress="handleCardKey(event, this)" tabindex="0" role="button" aria-expanded="false" data-testid="myth-card-1">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <h4>Myth #2: Origin of the Term</h4>
+              <p>The "carbon footprint" metric was established purely as an objective, unbiased academic framework from the global IPCC panel.</p>
+              <div class="card-footer-tip">Press space or tap to reveal</div>
+            </div>
+            <div class="flip-card-back">
+              <h4>Systemic Reality</h4>
+              <p>The term was popularized in 2004-2005 through BP's massive $100M campaign and consumer calculator. This redirected moral liability onto the household. However, today the carbon footprint has transcended this origin, serving as an audited, rigorous corporate accounting rule.</p>
+              <div class="card-footer-tip">Press space or tap to flip back</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Flip Card 3 -->
+        <div class="flip-card animate-on-scroll" onclick="flipCard(this)" onkeypress="handleCardKey(event, this)" tabindex="0" role="button" aria-expanded="false" data-testid="myth-card-2">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <h4>Myth #3: Grid Electrification</h4>
+              <p>Electrifying all consumer assets (such as HVAC and vehicles) using current microgrids immediately resolves industrial operations.</p>
+              <div class="card-footer-tip">Press space or tap to reveal</div>
+            </div>
+            <div class="flip-card-back">
+              <h4>Systemic Reality</h4>
+              <p>Electrification shifts the endpoint emission, but if the local grid relies on combustion (coal/gas), those assets still generate Scope 2 emissions. Additionally, industrial actions like cement calcination emit carbon via direct chemical breakdowns of raw limestone, completely independent of electric usage.</p>
+              <div class="card-footer-tip">Press space or tap to flip back</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Flip Card 4 -->
+        <div class="flip-card animate-on-scroll" onclick="flipCard(this)" onkeypress="handleCardKey(event, this)" tabindex="0" role="button" aria-expanded="false" data-testid="myth-card-3">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <h4>Myth #4: National Trajectory</h4>
+              <p>High-income Western nations have achieved structural emissions declines, proving local industrial decoupling.</p>
+              <div class="card-footer-tip">Press space or tap to reveal</div>
+            </div>
+            <div class="flip-card-back">
+              <h4>Systemic Reality</h4>
+              <p>Standard reporting tracks "territorial" limits. But "consumption-based" data reveals that wealthy consumer societies frequently offshore industrial emissions to emerging production hubs (such as China/India). The physical carbon continues to rise globally despite local territorial balances.</p>
+              <div class="card-footer-tip">Press space or tap to flip back</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODULE 2: The Science of Carbon Accounting -->
+    <section id="science-module" class="section-card animate-on-scroll" aria-labelledby="h2-science">
+      <h2 id="h2-science">2. The Science of Carbon Accounting</h2>
+      <p>Human activities emit a diverse array of chemical compounds into the troposphere. To aggregate these varied compounds, scientists use a normalizing metric: <strong>Global Warming Potential (GWP)</strong>. Carbon Dioxide Equivalent (CO₂e) standardizes these gases, expressing the volume of CO₂ that would cause an identical warming impact over a specific time horizon (typically 100 years).</p>
+      
+      <div style="background-color: var(--secondary-core); color: white; padding: 20px; border-radius: 12px; margin-bottom: 24px;">
+        <h3 style="color: #90CAF9; font-weight: 700; margin-bottom: 12px;">The Standard GWP Formulation:</h3>
+        <p style="color: white; font-family: monospace; font-size: 11pt; margin-bottom: 0;">
+          Total CO₂e = &sum; [ Mass of Trace Gas &times; GWP (100-Year Factor) ]
+        </p>
+      </div>
+
+      <h3 style="margin-top: 24px;">Interactive GWP Mass Normalizer Cascade</h3>
+      <p>Interact with the simulation below to explore how various greenhouse gases mathematically convert to carbon dioxide equivalents.</p>
+      
+      <div class="cascade-container">
+        <div class="gas-controls">
+          <div>
+            <label class="mass-slider-header">
+              <span>Select Greenhouse Gas:</span>
+            </label>
+            <div class="gas-selector" role="radiogroup" aria-label="Select Greenhouse Gas Target">
+              <button class="gas-btn active" onclick="selectGas(this, 'CO2', 1)" role="radio" aria-checked="true" data-testid="gas-CO2">
+                <div class="gas-name">Carbon Dioxide</div>
+                <div class="gas-formula">CO₂ / GWP = 1</div>
+              </button>
+              <button class="gas-btn" onclick="selectGas(this, 'CH4', 28)" role="radio" aria-checked="false" data-testid="gas-CH4">
+                <div class="gas-name">Methane</div>
+                <div class="gas-formula">CH₄ / GWP = 28</div>
+              </button>
+              <button class="gas-btn" onclick="selectGas(this, 'N2O', 265)" role="radio" aria-checked="false" data-testid="gas-N2O">
+                <div class="gas-name">Nitrous Oxide</div>
+                <div class="gas-formula">N₂O / GWP = 265</div>
+              </button>
+              <button class="gas-btn" onclick="selectGas(this, 'SF6', 23500)" role="radio" aria-checked="false" data-testid="gas-SF6">
+                <div class="gas-name">Sulfur Hexafluoride</div>
+                <div class="gas-formula">SF₆ / GWP = 23,500</div>
+              </button>
+            </div>
+          </div>
+
+          <div class="mass-input-container">
+            <div class="mass-slider-header">
+              <label for="gas-slider">Released Mass of Trace Gas:</label>
+              <span><strong id="mass-value-display">10</strong> Metric Tons / Mg</span>
+            </div>
+            <input type="range" id="gas-slider" class="mass-slider" min="1" max="100" value="10" oninput="updateGwpCascade()" data-testid="gas-slider-ctrl">
+          </div>
+        </div>
+
+        <div class="cascade-viz animate-on-scroll" aria-live="polite">
+          <h3 style="margin-bottom: 12px; color: var(--secondary-core);">Equivalence Mathematical Visualization</h3>
+          <svg class="viz-svg" id="gwp-svg">
+            <!-- Background grids/axes are generated via JS dynamically -->
+            <g id="gwp-shapes"></g>
+          </svg>
+          <div class="viz-formula-display" id="viz-formula-text">
+            10 tons CO₂ &times; 1 (GWP) = 10 metric tons CO₂e
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODULE 3: Corporate Scopes & Typologies -->
+    <section id="scopes-module" class="section-card animate-on-scroll" aria-labelledby="h2-scopes">
+      <h2 id="h2-scopes">3. Corporate Scopes &amp; Typologies</h2>
+      <p>To establish systematic metrics across physical supply chains, the Greenhouse Gas Protocol groups corporate emissions profiles into three distinct analytical scopes. Managing a portfolio's footprint requires auditing upstream operations and customer lifecycle behaviors.</p>
+      
+      <div class="tabs-container">
+        <!-- A11y Tab list interface -->
+        <div class="tabs-list" role="tablist" aria-label="GHG Corporate Scopes Explorer">
+          <button id="tab-scope1" class="tab-trigger active" onclick="toggleScopeTab('scope1', 0)" role="tab" aria-selected="true" aria-controls="panel-scope1" data-testid="scope-tab-1">Scope 1 (Direct)</button>
+          <button id="tab-scope2" class="tab-trigger" onclick="toggleScopeTab('scope2', 1)" role="tab" aria-selected="false" aria-controls="panel-scope2" data-testid="scope-tab-2">Scope 2 (Indirect, Purchased)</button>
+          <button id="tab-scope3" class="tab-trigger" onclick="toggleScopeTab('scope3', 2)" role="tab" aria-selected="false" aria-controls="panel-scope3" data-testid="scope-tab-3">Scope 3 (Value Chain)</button>
+        </div>
+
+        <!-- Scope Content Panels -->
+        <div class="scope-panel-grid" aria-live="polite">
+          <div class="scope-indicators">
+            <div class="indicator-row active-row" id="scope-row-0">
+              <span class="indicator-label">Operational Auditing Boundary</span>
+              <span class="indicator-val" id="row-val-0">Corporate Controlled Space Only</span>
+            </div>
+            <div class="indicator-row" id="scope-row-1">
+              <span class="indicator-label">Measurement Complexity</span>
+              <span class="indicator-val" id="row-val-1">Moderate (Utility Auditable)</span>
+            </div>
+            <div class="indicator-row" id="scope-row-2">
+              <span class="indicator-label">Typical Share of Footprint</span>
+              <span class="indicator-val" id="row-val-2">~10% - 15% (Depends on sector)</span>
+            </div>
+          </div>
+
+          <div class="scope-detail-pane" id="scope-pane-box">
+            <span class="scope-badge" id="detail-scope-badge">Scope 1</span>
+            <div class="scope-asset-label" id="detail-scope-title">Direct On-Site Combustion &amp; Assets</div>
+            <p id="detail-scope-para">Direct emissions originating from operations immediately owned or managed by the organization. Key assets include internal combustion delivery vans, industrial furnaces, boiler systems, and HVAC cooling chemicals.</p>
+            <div>
+              <div style="display:flex; justify-content:space-between; font-size: 8.5pt;">
+                <span>Mitigation Viability (Direct Control):</span>
+                <span id="detail-slider-pct">95% (High direct command)</span>
+              </div>
+              <div class="impact-meter">
+                <div class="impact-fill" id="scope-impact-fill" style="width: 95%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODULE 4: Macroeconomic Drivers & Global Statistics -->
+    <section id="macro-module" class="section-card animate-on-scroll" aria-labelledby="h2-macro">
+      <h2 id="h2-macro">4. Macroeconomic Drivers &amp; Global Statistics</h2>
+      <p>Emissions trajectories align closely with economic models of production and consumer clusters. By mapping metrics across sectors and geographical income cohorts, we trace systemic inequality across planetary dynamics.</p>
+      
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 20px;">
+        <div class="toggle-group" role="group" aria-label="Dataset view toggle text">
+          <button class="toggle-choice active" onclick="swapDataset('sector')" id="toggle-sector" data-testid="data-selector-sector">By Global Industry Sector</button>
+          <button class="toggle-choice" onclick="swapDataset('income')" id="toggle-income" data-testid="data-selector-income">By Per Capita Income / Region</button>
+          <button class="toggle-choice" onclick="swapDataset('compare')" id="toggle-compare" data-testid="data-selector-compare">Compare Datasets</button>
+        </div>
+        <button class="download-summary-btn" onclick="downloadMacroCSV()" id="download-summary-btn" data-testid="download-summary-btn" aria-label="Download current table's dataset as CSV">
+          <svg style="margin-right: 6px; width: 16px; height: 16px; flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Download Summary (CSV)
+        </button>
+      </div>
+
+      <div class="stats-explorer">
+        <!-- Interactive Native SVG Chart built solely dynamically with Vanilla JS -->
+        <div class="svg-chart-container animate-on-scroll" aria-live="polite">
+          <h3 style="font-size: 10pt; color: var(--text-medium-grey); margin-bottom: 12px;" id="chart-subhead">Global Greenhouse Gas Breakdowns</h3>
+          <svg id="chart-svg" style="width:100%; height:250px; overflow:visible;">
+            <g id="chart-grid"></g>
+            <g id="chart-bars"></g>
+          </svg>
+        </div>
+
+        <!-- Sorted Data Table -->
+        <div class="table-container animate-on-scroll">
+          <table id="data-table">
+            <thead>
+              <tr id="table-headers">
+                <!-- Autogenerated via JS mapping. Includes dynamic sort callbacks -->
+              </tr>
+            </thead>
+            <tbody id="table-body">
+              <!-- Autogenerated tabular details -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODULE 5: Mitigation Pathways & Case Studies -->
+    <section id="pathways-module" class="section-card animate-on-scroll" aria-labelledby="h2-solutions">
+      <h2 id="h2-solutions">5. Mitigation Pathways and Case Studies</h2>
+      <p>Actual emissions reductions depend on pairing individual lifestyle choices with corporate supply-chain shifts and strong regulatory mechanisms. Direct mitigation methods reduce the carbon intensity of goods and services, decouple energy grids from fossil architectures, and transition toward closed circular models.</p>
+
+      <div class="case-studies-grid">
+        <!-- Case Study 1 -->
+        <div class="case-card" data-testid="case-0">
+          <div>
+            <div class="case-header">
+              <span class="case-target">Interface, Inc.</span>
+              <span class="case-result-badge">-74% Carbon</span>
+            </div>
+            <p class="case-caption">Standard carpet tiles are manufactured using petroleum-derived synthetics. By applying Lifecycle Auditing boundaries, Interface successfully substituted components with bio-based composites and raw fishing nets, demonstrating commercial decoupling.</p>
+          </div>
+          <button class="case-cta-btn" onclick="openModal('case0')" data-testid="open-case-0">
+            Examine Metrics
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+        </div>
+
+        <!-- Case Study 2 -->
+        <div class="case-card" data-testid="case-1">
+          <div>
+            <div class="case-header">
+              <span class="case-target">Meatless Monday</span>
+              <span class="case-result-badge">Methane Mitigation</span>
+            </div>
+            <p class="case-caption">Methane (CH₄) possesses a 100-year GWP that is 28 times stronger than CO₂. Eliminating red meat from diet vectors just one day a week decreases domestic landfill and enteric livestock metrics, easing near-term climate forcing.</p>
+          </div>
+          <button class="case-cta-btn" onclick="openModal('case1')" data-testid="open-case-1">
+            Examine Metrics
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+        </div>
+
+        <!-- Case Study 3 -->
+        <div class="case-card" data-testid="case-2">
+          <div>
+            <div class="case-header">
+              <span class="case-target">EU Tariff (CBAM)</span>
+              <span class="case-result-badge">Border Regulation</span>
+            </div>
+            <p class="case-caption">The Carbon Border Adjustment Mechanism (CBAM) imposes tariffs on imported chemicals, steel, and cement entering the EU, matching local cap-and-trade prices and directly mitigating international market carbon leakage.</p>
+          </div>
+          <button class="case-cta-btn" onclick="openModal('case2')" data-testid="open-case-2">
+            Examine Metrics
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODULE 6: Dynamic Circular Economy Section -->
+    <section id="circular-module" class="section-card animate-on-scroll" aria-labelledby="h2-circular">
+      <h2 id="h2-circular">6. Dynamic Circular Economy Loop</h2>
+      <p>Traditional industrial parameters are heavily bounded by a linear "Take-Make-Waste" economic track. This structure extracts finite raw minerals, processes them under fossil architectures, and deposits them in municipal landfills, triggering immense upstream and downstream Scope 3 emissions. </p>
+      <p>A **Circular Economy** decouples industrial throughput from planetary limitations by returning packaging, synthetics, and secondary components directly back into raw processing fields. This reduces the need for primary resource extraction and limits transport operations. Toggle the recyclability density or inspect individual loop stage buttons below to track dynamic Scope 3 savings metrics in real-time.</p>
+
+      <div class="circular-economy-container">
+        <div class="circ-controls">
+          <div>
+            <label class="mass-slider-header" style="margin-bottom: 8px;">
+              <span id="recycled-slider-label">Recycled Content Density Ratio:</span>
+              <span><strong id="recycled-val-text">40</strong>% Recycled</span>
+            </label>
+            <input type="range" id="recycled-slider" class="mass-slider" min="0" max="100" value="40" oninput="updateCircularLoop()" aria-labelledby="recycled-slider-label" data-testid="recycled-slider-ctrl">
+          </div>
+
+          <div class="circ-stages" role="radiogroup" aria-label="Circular Economy Loop Stages">
+            <button class="circ-stage-btn active" onclick="selectCircStage(this, 1)" role="radio" aria-checked="true" id="cstage-btn-1" data-testid="circ-stage-1">
+              <span class="circ-stage-num">1</span>
+              <div class="circ-stage-text-block">
+                <span class="circ-stage-title">Design &amp; Raw Procurement</span>
+                <span class="circ-stage-subtitle">Using ocean-bound synthetics &amp; bio-composites</span>
+              </div>
+            </button>
+            <button class="circ-stage-btn" onclick="selectCircStage(this, 2)" role="radio" aria-checked="false" id="cstage-btn-2" data-testid="circ-stage-2">
+              <span class="circ-stage-num">2</span>
+              <div class="circ-stage-text-block">
+                <span class="circ-stage-title">Clean Manufacturing</span>
+                <span class="circ-stage-subtitle">Zero production waste &amp; 100% clean power grids</span>
+              </div>
+            </button>
+            <button class="circ-stage-btn" onclick="selectCircStage(this, 3)" role="radio" aria-checked="false" id="cstage-btn-3" data-testid="circ-stage-3">
+              <span class="circ-stage-num">3</span>
+              <div class="circ-stage-text-block">
+                <span class="circ-stage-title">End-of-Life Re-entry</span>
+                <span class="circ-stage-subtitle">Closed-loop recovery, keeping items out of landfills</span>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <div class="circ-viz animate-on-scroll" aria-live="polite">
+          <h3 style="margin-bottom: 8px;" id="circ-viz-header">Dynamic Value-Chain Flow</h3>
+          <svg class="circ-loop-svg" id="circ-svg" viewBox="0 0 300 220">
+            <!-- Circular track path -->
+            <path id="circ-track-path" d="M 150 40 C 230 40, 230 180, 150 180 C 70 180, 70 40, 150 40" fill="none" stroke="#E8EAED" stroke-width="6" stroke-dasharray="2 2" />
+            <path id="circ-flow-path" d="M 150 40 C 230 40, 230 180, 150 180 C 70 180, 70 40, 150 40" fill="none" stroke="var(--primary-brand)" stroke-width="6" stroke-linecap="round" stroke-dasharray="0 1000" />
+            
+            <!-- Nodes -->
+            <circle id="circ-node-1" class="circ-node-circle active" cx="150" cy="40" r="12" fill="var(--primary-brand)" onclick="clickCircNode(1)" />
+            <circle id="circ-node-2" class="circ-node-circle" cx="210" cy="110" r="10" fill="var(--text-medium-grey)" onclick="clickCircNode(2)" />
+            <circle id="circ-node-3" class="circ-node-circle" cx="90" cy="110" r="10" fill="var(--text-medium-grey)" onclick="clickCircNode(3)" />
+
+            <!-- Labels -->
+            <text x="150" y="22" font-size="8pt" font-family="'Space Grotesk', sans-serif" font-weight="700" text-anchor="middle" fill="var(--secondary-core)">Design &amp; Materials</text>
+            <text x="228" y="114" font-size="8pt" font-family="'Space Grotesk', sans-serif" font-weight="700" text-anchor="start" fill="var(--secondary-core)">Clean Manufacture</text>
+            <text x="72" y="114" font-size="8pt" font-family="'Space Grotesk', sans-serif" font-weight="700" text-anchor="end" fill="var(--secondary-core)">System Re-entry</text>
+
+            <!-- Animated Particles -->
+            <circle id="circ-particle-1" class="circ-particle" r="6" fill="var(--primary-brand)" />
+            <circle id="circ-particle-2" class="circ-particle" r="6" fill="var(--primary-brand)" style="animation-delay: -2s;" />
+            <circle id="circ-particle-3" class="circ-particle" r="6" fill="var(--primary-brand)" style="animation-delay: -4s;" />
+          </svg>
+
+          <p id="circ-explain-text" style="font-size: 9.5pt; color: var(--text-medium-grey); text-align: center; margin-top: 12px; margin-bottom: 12px; min-height: 48px;">
+            Selecting Stage 1: Design &amp; Raw procurement focus. Choosing recycled or bio-material substitutes lowers raw upstream Scope 3 raw material input needs by 40%.
+          </p>
+
+          <div class="circ-metric-card" style="width: 100%;">
+            <span style="font-size: 10pt; font-weight: 500; color: var(--text-charcoal);">Scope 3 Value-Chain Savings:</span>
+            <span style="font-family: 'Space Grotesk', sans-serif; font-size: 14pt; font-weight: 700; color: var(--success-green);" id="circ-savings-pct">28% Saved</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODULE 7: Common Questions (A11y Accessible Accordion Component) -->
+    <section id="faq-module" class="section-card animate-on-scroll" aria-labelledby="faq-module-title" style="margin-top: 32px;">
+      <div class="module-header">
+        <span class="module-number">07</span>
+        <h2 id="faq-module-title">Common Questions</h2>
+        <p class="module-sub">Essential carbon accounting concepts, regulatory boundaries, and systemic definitions explained in brief.</p>
+      </div>
+
+      <div class="accordion-container" role="presentation">
+        <!-- Accordion Item 1 -->
+        <div class="accordion-item" id="faq-item-1">
+          <h3 class="accordion-header">
+            <button class="accordion-trigger" type="button" aria-expanded="false" aria-controls="faq-panel-1" id="faq-btn-1" onclick="toggleAccordion(this)">
+              <span>What is the fundamental difference between Scope 1, 2, and 3 emissions?</span>
+              <svg class="accordion-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M7 10l5 5 5-5H7z" fill="currentColor"/>
+              </svg>
+            </button>
+          </h3>
+          <div class="accordion-panel" id="faq-panel-1" role="region" aria-labelledby="faq-btn-1" style="max-height: 0px; overflow: hidden; transition: max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1), padding-bottom 0.3s cubic-bezier(0.16, 1, 0.3, 1);">
+            <div class="accordion-content">
+              <p><strong>Scope 1 emissions</strong> cover direct greenhouse gas releases from sources owned or controlled by an organization, such as on-site fuel combustion in company furnaces, boilers, or fleet vehicles.</p>
+              <p><strong>Scope 2 emissions</strong> account for indirect emissions associated with the production of purchased energy, such as electricity, steam, heating, or cooling consumed by the organization's buildings and assets.</p>
+              <p><strong>Scope 3 emissions</strong> encompass all other indirect emissions throughout the broader global value chain, both upstream and downstream (e.g., supplier transportation, raw materials extraction, employee commuting, and product end-of-use disposal). Because Scope 3 encompasses activities outside direct operational boundaries, it typically represents 70% to 90% of a standard company's carbon footprint and presents the highest calculation complexity.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Accordion Item 2 -->
+        <div class="accordion-item" id="faq-item-2">
+          <h3 class="accordion-header">
+            <button class="accordion-trigger" type="button" aria-expanded="false" aria-controls="faq-panel-2" id="faq-btn-2" onclick="toggleAccordion(this)">
+              <span>How does "Global Warming Potential" (GWP) calculate different greenhouse gases?</span>
+              <svg class="accordion-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M7 10l5 5 5-5H7z" fill="currentColor"/>
+              </svg>
+            </button>
+          </h3>
+          <div class="accordion-panel" id="faq-panel-2" role="region" aria-labelledby="faq-btn-2" style="max-height: 0px; overflow: hidden; transition: max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1), padding-bottom 0.3s cubic-bezier(0.16, 1, 0.3, 1);">
+            <div class="accordion-content">
+              <p>Global Warming Potential (GWP) is a standardized scaling index established by the IPCC to compare the heat-trapping ability of various greenhouse gases in the atmosphere relative to Carbon Dioxide (CO₂), which serves as the reference benchmark with a GWP of 1.</p>
+              <p>For example, Methane (CH₄) has a 100-year GWP of approximately 28 to 36, meaning that releasing one ton of methane traps as much heat as 28 to 36 tons of carbon dioxide over a century-long horizon. These relative ratios allow different gas releases to be normalized and combined into a single unified unit of <strong>Carbon Dioxide Equivalent (CO₂e)</strong>.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Accordion Item 3 -->
+        <div class="accordion-item" id="faq-item-3">
+          <h3 class="accordion-header">
+            <button class="accordion-trigger" type="button" aria-expanded="false" aria-controls="faq-panel-3" id="faq-btn-3" onclick="toggleAccordion(this)">
+              <span>Why does "Carbon Leakage" occur, and how can policy address it?</span>
+              <svg class="accordion-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M7 10l5 5 5-5H7z" fill="currentColor"/>
+              </svg>
+            </button>
+          </h3>
+          <div class="accordion-panel" id="faq-panel-3" role="region" aria-labelledby="faq-btn-3" style="max-height: 0px; overflow: hidden; transition: max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1), padding-bottom 0.3s cubic-bezier(0.16, 1, 0.3, 1);">
+            <div class="accordion-content">
+              <p>Carbon Leakage represents a regulatory mismatch that occurs when companies relocate their carbon-intensive manufacturing or refining facilities to nations with looser environmental standards to bypass stringent cap-and-trade or carbon tax policies. Ultimately, global warming remains unaffected (or worsens) because the exact same pollutants are emitted from a different country.</p>
+              <p>To mitigate this issue, policies such as the European Union's <strong>Border Carbon Adjustment Mechanism (CBAM)</strong> apply a carbon price to high-emission imports like cement, steel, and chemical electricity. This maintains competitive parity on domestic markets and encourages compliance with worldwide emission reduction goals.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Accordion Item 4 -->
+        <div class="accordion-item" id="faq-item-4">
+          <h3 class="accordion-header">
+            <button class="accordion-trigger" type="button" aria-expanded="false" aria-controls="faq-panel-4" id="faq-btn-4" onclick="toggleAccordion(this)">
+              <span>What is the difference between "Carbon Neutral" and SBTi-certified "Net-Zero"?</span>
+              <svg class="accordion-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M7 10l5 5 5-5H7z" fill="currentColor"/>
+              </svg>
+            </button>
+          </h3>
+          <div class="accordion-panel" id="faq-panel-4" role="region" aria-labelledby="faq-btn-4" style="max-height: 0px; overflow: hidden; transition: max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1), padding-bottom 0.3s cubic-bezier(0.16, 1, 0.3, 1);">
+            <div class="accordion-content">
+              <p>A <strong>Carbon Neutral</strong> claim typically allows an enterprise to balance out its greenhouse gas emissions by purchasing offset carbon credits (e.g., funding external forestry programs), without needing to change internally or reduce its direct pollution footprint first.</p>
+              <p>On the other hand, the Science Based Targets initiative's (SBTi) <strong>Net-Zero Standard</strong> requires strict scientific reductions of at least 90% to 95% across Scope 1, Scope 2, and Scope 3 footprints by a target date. Only a very small margin (5% to 10%) of residual emissions can be neutralized using highly durable greenhouse gas removals (such as direct air capture with underground basalt storage).</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Accordion Item 5 -->
+        <div class="accordion-item" id="faq-item-5">
+          <h3 class="accordion-header">
+            <button class="accordion-trigger" type="button" aria-expanded="false" aria-controls="faq-panel-5" id="faq-btn-5" onclick="toggleAccordion(this)">
+              <span>How do market-based carbon offsets differ from direct industrial decarbonization?</span>
+              <svg class="accordion-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M7 10l5 5 5-5H7z" fill="currentColor"/>
+              </svg>
+            </button>
+          </h3>
+          <div class="accordion-panel" id="faq-panel-5" role="region" aria-labelledby="faq-btn-5" style="max-height: 0px; overflow: hidden; transition: max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1), padding-bottom 0.3s cubic-bezier(0.16, 1, 0.3, 1);">
+            <div class="accordion-content">
+              <p>A **carbon offset** is a tradeable financial credit representing one metric ton of carbon avoided or removed by an external project (e.g., wind farms or tree planting). Offsets direct capital to climate projects but do not physical alter the operational processes of the buyer, raising questions regarding permanence and true emission additionality.</p>
+              <p>**Direct industrial decarbonization** directly targets the root causes of internal pollution, such as converting industrial furnaces to zero-emission green hydrogen, electrifying manufacturing machinery, or securing long-term solar/wind Power Purchase Agreements (PPAs). Scientific frameworks strongly prioritize direct decarbonization since it systematically and permanently eliminates emission vectors.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+ 
+    <!-- MODULE 8: Concept Check (Interactive Quiz) -->
+    <section id="quiz-module" class="section-card animate-on-scroll" aria-labelledby="quiz-module-title" style="margin-top: 32px;">
+      <div class="module-header">
+        <span class="module-number">08</span>
+        <h2 id="quiz-module-title" style="display: flex; align-items: center; gap: 8px;">
+          <span>Concept Check Quiz</span>
+        </h2>
+        <p class="module-sub">Reinforce your greenhouse gas accounting knowledge with a brief interactive assessment.</p>
+      </div>
+
+      <div class="quiz-container" id="quiz-container-elem">
+        <!-- Injected dynamically by initializeQuiz() via state management -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Interactive Modal Wrapper (A11y ARIA constraints / keyboard trap enabled) -->
+  <div class="modal-overlay" id="case-modal" onclick="closeModalOutside(event)">
+    <div class="modal-container" role="dialog" aria-modal="true" aria-labelledby="modal-title-text" id="modal-container-elem">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-title-text">Case Exploration</h3>
+        <button class="modal-close-btn" onclick="closeModal()" aria-label="Close Case Dialog" id="modal-close-ctrl">
+          <svg style="width:20px; height:20px; fill:var(--text-medium-grey);" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </div>
+      <div class="modal-body" id="modal-body-content">
+        <!-- Injected dynamically based on target study -->
+      </div>
+      <div class="modal-footer">
+        <button class="modal-dismiss-btn" onclick="closeModal()" data-testid="modal-close-btn">Close Panel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Glossary Modal Wrapper (A11y ARIA constraints / keyboard trap enabled) -->
+  <div class="modal-overlay" id="glossary-modal" onclick="closeGlossaryOutside(event)">
+    <div class="modal-container" role="dialog" aria-modal="true" aria-labelledby="glossary-title-text" id="glossary-container-elem">
+      <div class="modal-header">
+        <h3 class="modal-title" id="glossary-title-text">Core Glossary &amp; Definitions</h3>
+        <button class="modal-close-btn" onclick="closeGlossary()" aria-label="Close Glossary Dialog" id="glossary-close-ctrl">
+          <svg style="width:20px; height:20px; fill:var(--text-medium-grey);" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <div style="border-left: 3px solid var(--primary-brand); padding-left: 12px;">
+            <p style="margin-bottom: 4px; text-align: left;"><strong style="font-size: 11.5pt; color: var(--secondary-core);">Scope 3 Emissions</strong></p>
+            <p style="margin-bottom: 0; text-align: left; font-size: 10pt; color: var(--text-medium-grey);">Indirect greenhouse gas emissions that occur throughout a company's broader value chain (both upstream and downstream), typically comprising over 70% to 90% of a standard product or enterprise carbon footprint. This represents the greatest measurement complexity because it involves external suppliers and customers.</p>
+          </div>
+          <div style="border-left: 3px solid var(--primary-brand); padding-left: 12px;">
+            <p style="margin-bottom: 4px; text-align: left;"><strong style="font-size: 11.5pt; color: var(--secondary-core);">Global Warming Potential (GWP)</strong></p>
+            <p style="margin-bottom: 0; text-align: left; font-size: 10pt; color: var(--text-medium-grey);">A standardized index established by the IPCC that calculates the relative warming effect of a trace greenhouse gas over a designated time horizon (usually 100 years), using Carbon Dioxide (CO₂) as the baseline reference value of 1.</p>
+          </div>
+          <div style="border-left: 3px solid var(--primary-brand); padding-left: 12px;">
+            <p style="margin-bottom: 4px; text-align: left;"><strong style="font-size: 11.5pt; color: var(--secondary-core);">Carbon Leakage</strong></p>
+            <p style="margin-bottom: 0; text-align: left; font-size: 10pt; color: var(--text-medium-grey);">The displacement of carbon-intensive operations from highly regulated regions (such as countries or zones with active cap-and-trade systems or carbon taxes) to sovereign territories with less stringent targets, shifting rather than lowering absolute global emissions.</p>
+          </div>
+          <div style="border-left: 3px solid var(--primary-brand); padding-left: 12px;">
+            <p style="margin-bottom: 4px; text-align: left;"><strong style="font-size: 11.5pt; color: var(--secondary-core);">CO₂ Equivalent (CO₂e)</strong></p>
+            <p style="margin-bottom: 0; text-align: left; font-size: 10pt; color: var(--text-medium-grey);">A mathematical normalization representing the cumulative mass of Carbon Dioxide that would create an identical level of radiative forcing (atmospheric heat storage) as a given quantity of a specific greenhouse gas over a specified time scale.</p>
+          </div>
+          <div style="border-left: 3px solid var(--primary-brand); padding-left: 12px;">
+            <p style="margin-bottom: 4px; text-align: left;"><strong style="font-size: 11.5pt; color: var(--secondary-core);">Radiative Forcing</strong></p>
+            <p style="margin-bottom: 0; text-align: left; font-size: 10pt; color: var(--text-medium-grey);">The thermodynamic difference between incoming solar radiation entering Earth's climate system versus outgoing thermal infrared emission leaving the atmosphere. Positive radiative forcing warms the biosphere and oceans.</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-dismiss-btn" onclick="closeGlossary()" data-testid="glossary-close-btn">Close Glossary</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Back to Top Floating Action Button (Material 3 guidelines) -->
+  <button id="back-to-top-fab" class="back-to-top-fab" onclick="scrollToTop()" aria-label="Back to top" title="Scroll back to top">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <line x1="12" y1="19" x2="12" y2="5"></line>
+      <polyline points="5 12 12 5 19 12"></polyline>
+    </svg>
+  </button>
+
+  <!-- Footnotes & Regulatory Framework details -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-desc">
+        <h3>Carbon Footprint Awareness Platform</h3>
+        <p>This dynamic educational suite serves to clarify environmental metrics. All numerical datasets, references, and frameworks are derived directly from the IPCC Working Group III findings, Greenhouse Gas Protocol disclosures, and macroeconomic trade observations.</p>
+
+      </div>
+    </div>
+    <div class="footer-copyright">
+      &copy; 2026 CarbonAware Platform. All Rights Reserved. Fully accessible and responsive client-side distribution.
+    </div>
+  </footer>
+
+  <script>
+    /**
+     * STATE MANAGEMENT - Encapsulated inside a clean local scope wrapper closure
+     * to completely block state console manipulations and injection attacks.
+     */
+    (function() {
+      // Base application state
+      const STATE = {
+        activeTab: 'scope1',
+        gwpGas: 'CO2',
+        gwpFactor: 1,
+        gwpMass: 10,
+        activeDataset: 'sector', // 'sector' or 'income'
+        sortField: 'value',
+        sortAsc: false,
+        activeModal: null,
+        focusedElementBeforeModal: null,
+        circularRatio: 40,
+        circularStage: 1,
+        quizCurrentIdx: 0,
+        quizSelectedOpt: null,
+        quizAnswered: false,
+        quizScore: 0,
+        quizAnswersState: [] // keeps track of 'correct' or 'incorrect' for each question
+      };
+
+      // IMMUTABLE QUIZ DATABASE
+      const QUIZ_QUESTIONS = [
+        {
+          question: "A global enterprise seeking Science-Based Targets initiative (SBTi) verification purchases forestry carbon offset credits to balance 100% of its emissions without reducing internal fossil energy use. Does this qualify for SBTi validation?",
+          options: [
+            "Yes, because external carbon sequestration project funding offsets their physical emissions volume with identical climatic equivalence.",
+            "No, because the SBTi Net-Zero Standard requires at least 90-95% absolute internal decarbonization before utilizing highly permanent geological removals for remaining offsets.",
+            "Yes, provided they pay carbon tariff penalties conforming with Border Carbon Adjustment mechanisms (CBAM)."
+          ],
+          correctIndex: 1,
+          explanation: "The SBTi Net-Zero Standard enforces a strict hierarchy preferring absolute direct decarbonization of emissions pathways by 90-95%. Outward offsets are not substitutes for systemic corporate emission elimination."
+        },
+        {
+          question: "A factory moves from burning on-site fossil fuels in company boilers to utilizing grid-electricity derived from a local municipal coal power plant. Under which standard Greenhouse Gas category does this electrical energy consumption classify?",
+          options: [
+            "Scope 1 (Direct emissions from owned or controlled operations)",
+            "Scope 2 (Indirect emissions associated with purchased energy, steam, heating, or cooling)",
+            "Scope 3 (Broader, value-chain emissions encompassing supplier extraction and distribution)"
+          ],
+          correctIndex: 1,
+          explanation: "Scope 2 strictly classifies indirect greenhouse gas emissions resulting from purchased power, steam, cooling, or municipal heating consumed directly within operational assets."
+        },
+        {
+          question: "Methane (CH₄) is listed in global carbon indices with a 100-year Global Warming Potential (GWP) of 28. What does this numerical value mathematically represent in corporate carbon accounting?",
+          options: [
+            "Atmospheric releases of Methane remain trapped in the cycle precisely 28 times longer than normal Carbon Dioxide.",
+            "A single metric ton of Methane released traps an equivalent amount of thermal radiative forcing warmth as releasing 28 metric tons of Carbon Dioxide over a 100-year index scale.",
+            "Industrial Methane emissions trigger 28 times more acid precipitation than common Carbon Dioxide output."
+          ],
+          correctIndex: 1,
+          explanation: "GWP is a normalized multiplication index defined by the IPCC comparing how many times more thermal energy a gas traps relative to Carbon Dioxide (the benchmark reference baseline of 1) over a 100-year time scale."
+        }
+      ];
+
+      // IMMUTABLE RESEARCH DATABASE (Derived strictly from verified documentation)
+      const MOCK_DB = {
+        gasProperties: {
+          CO2: { name: "Carbon Dioxide", formula: "CO₂", gwp: 1, color: "#1A73E8" },
+          CH4: { name: "Methane", formula: "CH₄", gwp: 28, color: "#E67C73" },
+          N2O: { name: "Nitrous Oxide", formula: "N₂O", gwp: 265, color: "#F4B400" },
+          SF6: { name: "Sulfur Hexafluoride", formula: "SF₆", gwp: 23500, color: "#12B886" }
+        },
+        scopeData: {
+          scope1: {
+            title: "Direct On-Site Combustion and Assets",
+            badge: "Scope 1",
+            indicator0: "Owned Property Boiler Systems Only",
+            indicator1: "Direct Auditing of Fuel Reciprocals",
+            indicator2: "~5% - 15% Profile Share",
+            desc: "Direct emissions originating from operations immediately owned or managed by the organization. Key assets include internal combustion delivery vans, primary raw manufacturing furnaces, company-controlled boilers, and HVAC refrigerant gases which may trigger volatile leak factors.",
+            pct: "95% (High direct control)"
+          },
+          scope2: {
+            title: "Indirect Operational Purchased Utilities",
+            badge: "Scope 2",
+            indicator0: "Utility Providers Power Stations",
+            indicator1: "Moderate (Direct Utility Bills)",
+            indicator2: "~25% - 35% Profile Share",
+            desc: "Indirect emissions associated with purchased utilities—specifically electricity, central heating, and chilling plants. While physical emission takes place at the turbine generation base, liability is assigned to the consuming firm, presenting key utility negotiation vectors.",
+            pct: "65% (Grid infrastructure dependent)"
+          },
+          scope3: {
+            title: "Value Chain & Long-term Operations",
+            badge: "Scope 3",
+            indicator0: "Direct Upstream & Downstream Suppliers",
+            indicator1: "High Complexity (Requires supply audits)",
+            indicator2: "Over 70% - 90% Profile Share",
+            desc: "All downstream and upstream activities completely outside of primary operational control. Includes third-party logistics tankers, raw resource mining, downstream consumer waste, software server cloud arrays, and professional standard aviation travel flights. For major manufacturing and technical firms, this accounts for up to 90% of structural footprints.",
+            pct: "25% (Extremely difficult to enforce)"
+          }
+        },
+        datasets: {
+          sector: [
+            { key: "electricity", label: "Electricity & Heating", value: 31, description: "Direct fossil fuel combustion for utility platforms and city grids." },
+            { key: "agriculture", label: "Agriculture, Forestry (AFOLU)", value: 23, description: "Enteric livestock outputs, synthetic soils, and tropical rainforest clearance." },
+            { key: "industry", label: "Industry & Metallurgy", value: 22, description: "High-heat calcination processes, metal forging, and refinery structures." },
+            { key: "transportation", label: "Global Transportation", value: 15, description: "Road vehicles, transoceanic shipping oil, and high-altitude flight engines." },
+            { key: "buildings", label: "On-site Buildings", value: 9, description: "Residential direct thermal heat burners and leakages of refrigerant gases." }
+          ],
+          income: [
+            { key: "top10", label: "Richest 10% Citizens", value: 49, description: "Hyper-consuming demographic segments driving nearly half of global emissions." },
+            { key: "middle40", label: "Middle 40% Citizens", value: 39, description: "Moderately industrial households with increasing auto-centric dependencies." },
+            { key: "bottom50", label: "Poorest 50% Citizens", value: 12, description: "Systemically disenfranchised communities bearing the brunt of atmospheric risks." }
+          ]
+        },
+        caseStudies: {
+          case0: {
+            title: "Interface Carpeting Modular Transition",
+            results: "74% Decrease in Product Embedded Carbon",
+            section1: "Interface Inc. recognized raw petroleum yarn generated 80% of product-level carbon footprints. By shifting boundaries, they targeted bio-based raw elements, incorporating discarded industrial fishing nets into standard polymer yarn.",
+            section2: "Their process also involved switching factory utility configurations to dedicated renewable purchase protocols. Through standard ISO 14040/14044 certified Lifecyle Audits (LCA), Interface achieved the world's first carbon-negative flooring tiles, bypassing traditional petroleum dependency of chemical plastic bases."
+          },
+          case1: {
+            title: "Nutritional Dietary Shifts Strategy",
+            results: "Methane and Nitrous Oxide Reduction",
+            section1: "Agriculture represents roughly 22% of global emissions, where cattle enteric digestion dominates methane (CH4) outputs. Methane maintains an atmospheric life of 12 years but triggers extreme thermal storage capacities near-term (GWP approx. 28-36).",
+            section2: "The Meatless Monday framework leverages simple structural choices. Swapping beef for standard lentils reduces a single dish's footprint by up to 70%. If scaled, single-day adjustments provide immediate reductions in near-term radiative forcing compared to slow CO₂ removals."
+          },
+          case2: {
+            title: "EU Carbon Border Adjustment (CBAM)",
+            results: "Standard Harmonization of Capital Offshoring",
+            section1: "High environmental regulations inside domestic zones sometimes encourage corporations to pivot operations abroad. This leakage matches identical global carbon rates but masks regional indices.",
+            section2: "Launched in 2023, the European Union's CBAM addresses this system directly, imposing clear import tariffs on structural commodities (iron, steel, cement) entering EU boundaries. If international suppliers lack audited low-carbon processing, they face heavy tariffs, driving clean technology changes in developing regions."
+          }
+        }
+      };
+
+      // SCROLL VIEW SYSTEM
+      window.scrollToSection = function(id) {
+        const target = document.getElementById(id);
+        if (target) {
+          const offset = 80; // Header margin compensation
+          const bodyRect = document.body.getBoundingClientRect().top;
+          const targetRect = target.getBoundingClientRect().top;
+          const targetPosition = targetRect - bodyRect - offset;
+          
+          window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+          });
+
+          // Focus management for A11y
+          target.setAttribute('tabindex', '-1');
+          target.focus({ preventScroll: true });
+        }
+      };
+
+      // CAROUSEL / MYTH MATRIX CARDS
+      window.flipCard = function(element) {
+        element.classList.toggle('flipped');
+        const isExpanded = element.classList.contains('flipped');
+        element.setAttribute('aria-expanded', isExpanded.toString());
+      };
+
+      window.handleCardKey = function(event, element) {
+        if (event.key === ' ' || event.key === 'Enter') {
+          event.preventDefault(); // Stop window spacebar scroll
+          flipCard(element);
+        }
+      };
+
+      // MODULE 2 - GWP CASCADING INTERRUPT INTERFACES
+      window.selectGas = function(btnElement, gasKey, gwpFactor) {
+        // Toggle Active styles safely
+        const selectorGroup = btnElement.parentElement;
+        const selectorBtns = selectorGroup.querySelectorAll('.gas-btn');
+        selectorBtns.forEach(btn => {
+          btn.classList.remove('active');
+          btn.setAttribute('aria-checked', 'false');
+        });
+
+        btnElement.classList.add('active');
+        btnElement.setAttribute('aria-checked', 'true');
+
+        STATE.gwpGas = gasKey;
+        STATE.gwpFactor = gwpFactor;
+        
+        updateGwpCascade();
+      };
+
+      window.updateGwpCascade = function() {
+        // Safe slider update
+        const slider = document.getElementById('gas-slider');
+        const massVal = parseInt(slider.value, 10);
+        STATE.gwpMass = massVal;
+
+        // Render current value securely
+        const valDisplay = document.getElementById('mass-value-display');
+        valDisplay.textContent = massVal.toString();
+
+        const calculatedCo2e = massVal * STATE.gwpFactor;
+        const formattedCo2e = calculatedCo2e.toLocaleString();
+
+        const gasInfo = MOCK_DB.gasProperties[STATE.gwpGas];
+        
+        // Escape dynamic dynamic strings using textContent
+        const formulaTextElem = document.getElementById('viz-formula-text');
+        formulaTextElem.textContent = `${massVal} metric ton(s) of ${gasInfo.name} (${gasInfo.formula}) × ${STATE.gwpFactor} (GWP Ratio) = ${formattedCo2e} metric tons of CO₂e`;
+
+        // SVG Drawing Cascade Engine safely
+        const shapesGroup = document.getElementById('gwp-shapes');
+        shapesGroup.innerHTML = ''; // Safe clear under local wrapper framework
+
+        const svgWidth = 400;
+        const svgHeight = 180;
+
+        // Left Node - Represent raw trace gas
+        const leftNodeContainer = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        leftNodeContainer.setAttribute("cx", "70");
+        leftNodeContainer.setAttribute("cy", "90");
+        const radiusRaw = Math.min(25, 8 + (massVal / 4));
+        leftNodeContainer.setAttribute("r", radiusRaw.toString());
+        leftNodeContainer.setAttribute("fill", gasInfo.color);
+        leftNodeContainer.setAttribute("opacity", "0.85");
+        shapesGroup.appendChild(leftNodeContainer);
+
+        // Text tag for raw molecule
+        const leftLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        leftLabel.setAttribute("x", "70");
+        leftLabel.setAttribute("y", "95");
+        leftLabel.setAttribute("text-anchor", "middle");
+        leftLabel.setAttribute("fill", "white");
+        leftLabel.setAttribute("font-size", "10px");
+        leftLabel.setAttribute("font-weight", "bold");
+        leftLabel.textContent = gasInfo.formula;
+        shapesGroup.appendChild(leftLabel);
+
+        // Multiplier bridge text
+        const midText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        midText.setAttribute("x", "180");
+        midText.setAttribute("y", "95");
+        midText.setAttribute("text-anchor", "middle");
+        midText.setAttribute("fill", "#202124");
+        midText.setAttribute("font-size", "12px");
+        midText.setAttribute("font-weight", "bold");
+        midText.textContent = `× ${STATE.gwpFactor}`;
+        shapesGroup.appendChild(midText);
+
+        // Arrow bridge lines
+        const arrowLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        arrowLine.setAttribute("x1", "110");
+        arrowLine.setAttribute("y1", "90");
+        arrowLine.setAttribute("x2", "250");
+        arrowLine.setAttribute("y2", "90");
+        arrowLine.setAttribute("stroke", "#B0BEC5");
+        arrowLine.setAttribute("stroke-width", "2");
+        arrowLine.setAttribute("stroke-dasharray", "4,4");
+        shapesGroup.appendChild(arrowLine);
+
+        // Right Node - Equivalent CO2 size representation
+        const rightNodeContainer = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        rightNodeContainer.setAttribute("cx", "320");
+        rightNodeContainer.setAttribute("cy", "90");
+        
+        // Dynamic logarithmic sizing to fit inside boundaries
+        const calculatedR = 10 + (Math.log10(calculatedCo2e + 1) * 12);
+        const radiusEquiv = Math.min(50, calculatedR);
+        rightNodeContainer.setAttribute("r", radiusEquiv.toString());
+        rightNodeContainer.setAttribute("fill", "#1A73E8");
+        rightNodeContainer.setAttribute("opacity", "0.75");
+        shapesGroup.appendChild(rightNodeContainer);
+
+        const rightLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        rightLabel.setAttribute("x", "320");
+        rightLabel.setAttribute("y", "94");
+        rightLabel.setAttribute("text-anchor", "middle");
+        rightLabel.setAttribute("fill", "white");
+        rightLabel.setAttribute("font-size", "10px");
+        rightLabel.setAttribute("font-weight", "bold");
+        rightLabel.textContent = "CO₂e";
+        shapesGroup.appendChild(rightLabel);
+      };
+
+      // MODULE 3: TABS CONTROL SYSTEM
+      window.toggleScopeTab = function(scopeId, index) {
+        STATE.activeTab = scopeId;
+        
+        // Remove active state classes gracefully
+        const triggers = document.querySelectorAll('.tab-trigger');
+        triggers.forEach(trigger => {
+          trigger.classList.remove('active');
+          trigger.setAttribute('aria-selected', 'false');
+        });
+
+        const activeElem = document.getElementById(`tab-${scopeId}`);
+        if (activeElem) {
+          activeElem.classList.add('active');
+          activeElem.setAttribute('aria-selected', 'true');
+        }
+
+        // Update the active interactive indicators in the left pane
+        const indicatorsGroup = document.querySelectorAll('.indicator-row');
+        indicatorsGroup.forEach((ind, idx) => {
+          ind.classList.remove('active-row');
+        });
+        
+        const activeInd = document.getElementById(`scope-row-${index}`);
+        if (activeInd) {
+          activeInd.classList.add('active-row');
+        }
+
+        // Fetch corresponding scope database detail
+        const dbData = MOCK_DB.scopeData[scopeId];
+        
+        // Dynamic text replacement (A11y safe, zero innerHTML exploitation)
+        document.getElementById('row-val-0').textContent = dbData.indicator0;
+        document.getElementById('row-val-1').textContent = dbData.indicator1;
+        document.getElementById('row-val-2').textContent = dbData.indicator2;
+
+        document.getElementById('detail-scope-badge').textContent = dbData.badge;
+        document.getElementById('detail-scope-title').textContent = dbData.title;
+        document.getElementById('detail-scope-para').textContent = dbData.desc;
+        document.getElementById('detail-slider-pct').textContent = dbData.pct;
+
+        // Transition fill width
+        const fillBarVal = scopeId === 'scope1' ? '95%' : (scopeId === 'scope2' ? '65%' : '25%');
+        document.getElementById('scope-impact-fill').style.width = fillBarVal;
+      };
+
+      // MODULE 4: DYNAMIC MACROECONOMIC CHART & TABLE SYSTEM
+      window.swapDataset = function(type) {
+        STATE.activeDataset = type;
+        
+        // Update toggles layout
+        const tSector = document.getElementById('toggle-sector');
+        const tIncome = document.getElementById('toggle-income');
+        const tCompare = document.getElementById('toggle-compare');
+        
+        if (type === 'sector') {
+          tSector.classList.add('active');
+          tIncome.classList.remove('active');
+          if (tCompare) tCompare.classList.remove('active');
+          document.getElementById('chart-subhead').textContent = "Global Greenhouse Gas Sectors Share (%)";
+        } else if (type === 'income') {
+          tSector.classList.remove('active');
+          tIncome.classList.add('active');
+          if (tCompare) tCompare.classList.remove('active');
+          document.getElementById('chart-subhead').textContent = "Global Sovereign Income Per Capita Consumption (Tons/capita/year)";
+        } else if (type === 'compare') {
+          tSector.classList.remove('active');
+          tIncome.classList.remove('active');
+          if (tCompare) tCompare.classList.add('active');
+          document.getElementById('chart-subhead').textContent = "Overlay: Sector Share (0-40% Left Scale / Blue) vs. Wealth Cohort footprint (0-60 Tons/yr Right Scale / Orange)";
+        }
+
+        // Re-render chart and table
+        renderMacroTable();
+        renderMacroChart();
+      };
+
+      function renderMacroChart() {
+        const svg = document.getElementById('chart-svg');
+        const gridG = document.getElementById('chart-grid');
+        const barsG = document.getElementById('chart-bars');
+
+        gridG.innerHTML = '';
+        barsG.innerHTML = '';
+
+        const chartWidth = svg.getBoundingClientRect().width || 450;
+        const chartHeight = 220;
+
+        let data;
+        let isSector = STATE.activeDataset === 'sector';
+        let isCompare = STATE.activeDataset === 'compare';
+
+        if (isCompare) {
+          data = [
+            ...MOCK_DB.datasets.sector.map(d => ({ ...d, isSector: true })),
+            ...MOCK_DB.datasets.income.map(d => ({ ...d, isSector: false }))
+          ];
+        } else {
+          data = MOCK_DB.datasets[STATE.activeDataset].map(d => ({ ...d, isSector: isSector }));
+        }
+
+        const gap = isCompare ? 8 : 12;
+        const barHeight = Math.floor((chartHeight - (gap * (data.length + 1))) / data.length);
+
+        // Grid scales
+        // Sector: 0 - 40%
+        // Income: 0 - 60 tons
+        const maxVal = isCompare ? 1 : Math.max(...data.map(d => d.value));
+
+        // Drawing Axis Label Guidelines
+        for (let i = 0; i <= 4; i++) {
+          const ratio = i / 4;
+          const xPos = 140 + (ratio * (chartWidth - 180));
+
+          // Grid Line
+          const gridLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+          gridLine.setAttribute("x1", xPos.toString());
+          gridLine.setAttribute("y1", "10");
+          gridLine.setAttribute("x2", xPos.toString());
+          gridLine.setAttribute("y2", (chartHeight - 20).toString());
+          gridLine.setAttribute("stroke", "#E0E0E0");
+          gridLine.setAttribute("stroke-width", "1");
+          gridG.appendChild(gridLine);
+
+          // Grid Label
+          const gridText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+          gridText.setAttribute("x", xPos.toString());
+          gridText.setAttribute("y", (chartHeight - 4).toString());
+          gridText.setAttribute("text-anchor", "middle");
+          gridText.setAttribute("font-size", "9px");
+          gridText.setAttribute("fill", "#70757A");
+
+          if (isCompare) {
+            const labelSector = Math.round(ratio * 40);
+            const labelIncome = Math.round(ratio * 60);
+            gridText.textContent = `${labelSector}% | ${labelIncome}T`;
+          } else {
+            const tickLabelVal = Math.round(ratio * maxVal);
+            gridText.textContent = isSector ? `${tickLabelVal}%` : `${tickLabelVal} Tons`;
+          }
+          gridG.appendChild(gridText);
+        }
+
+        // Plot bars sequence
+        data.forEach((item, index) => {
+          const yPos = gap + (index * (barHeight + gap));
+          
+          let valWidth;
+          let barColor;
+          if (isCompare) {
+            if (item.isSector) {
+              valWidth = ((item.value / 40) * (chartWidth - 180));
+              barColor = "#1A73E8"; // Sector Blue
+            } else {
+              valWidth = ((item.value / 60) * (chartWidth - 180));
+              barColor = "#E67C73"; // Wealth Cohort Coral-Orange
+            }
+          } else {
+            valWidth = ((item.value / maxVal) * (chartWidth - 180));
+            barColor = isSector ? "#1A73E8" : "#0D1B2A";
+          }
+
+          // Label
+          const textLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
+          textLabel.setAttribute("x", "10");
+          textLabel.setAttribute("y", (yPos + (barHeight / 2) + 4).toString());
+          textLabel.setAttribute("font-size", isCompare ? "8.5px" : "10px");
+          textLabel.setAttribute("font-weight", "500");
+          textLabel.setAttribute("fill", "#202124");
+          
+          let cleanLabel = item.label;
+          if (isCompare) {
+            const tag = item.isSector ? " (S)" : " (I)";
+            if (cleanLabel.length > 15) {
+              cleanLabel = cleanLabel.substring(0, 13) + ".." + tag;
+            } else {
+              cleanLabel = cleanLabel + tag;
+            }
+          } else {
+            if (cleanLabel.length > 20) {
+              cleanLabel = cleanLabel.substring(0, 18) + "..";
+            }
+          }
+          textLabel.textContent = cleanLabel;
+          barsG.appendChild(textLabel);
+
+          // Bar Rect
+          const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+          rect.setAttribute("x", "140");
+          rect.setAttribute("y", yPos.toString());
+          rect.setAttribute("width", valWidth.toString());
+          rect.setAttribute("height", barHeight.toString());
+          rect.setAttribute("rx", "4");
+          rect.setAttribute("fill", barColor);
+          rect.setAttribute("opacity", "0.85");
+          
+          // Hover interactions
+          rect.style.transition = "fill 0.2s ease, opacity 0.2s ease";
+          rect.addEventListener("mouseenter", () => {
+            rect.setAttribute("opacity", "1");
+            rect.setAttribute("fill", "#0F9D58");
+          });
+          rect.addEventListener("mouseleave", () => {
+            rect.setAttribute("opacity", "0.85");
+            rect.setAttribute("fill", barColor);
+          });
+
+          barsG.appendChild(rect);
+
+          // Value Label
+          const valLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
+          valLabel.setAttribute("x", (145 + valWidth).toString());
+          valLabel.setAttribute("y", (yPos + (barHeight / 2) + 4).toString());
+          valLabel.setAttribute("font-size", "9px");
+          valLabel.setAttribute("font-weight", "bold");
+          valLabel.setAttribute("fill", "#202124");
+          
+          if (isCompare) {
+            valLabel.textContent = item.isSector ? `${item.value}%` : `${item.value} T`;
+          } else {
+            valLabel.textContent = isSector ? `${item.value}%` : `${item.value} T`;
+          }
+          barsG.appendChild(valLabel);
+        });
+      }
+
+      function initTableTooltip() {
+        let tooltip = document.getElementById('table-row-tooltip');
+        if (!tooltip) {
+          tooltip = document.createElement('div');
+          tooltip.id = 'table-row-tooltip';
+          tooltip.className = 'table-row-tooltip';
+          tooltip.setAttribute('aria-hidden', 'true');
+          tooltip.setAttribute('role', 'tooltip');
+          document.body.appendChild(tooltip);
+        }
+      }
+
+      function renderMacroTable() {
+        const headers = document.getElementById('table-headers');
+        const body = document.getElementById('table-body');
+
+        headers.innerHTML = '';
+        body.innerHTML = '';
+
+        const isSector = STATE.activeDataset === 'sector';
+        const isCompare = STATE.activeDataset === 'compare';
+        
+        let columns;
+        if (isCompare) {
+          columns = [
+            { key: 'label', text: 'Sector or Wealth Cohort Category' },
+            { key: 'type', text: 'Dataset Dimension' },
+            { key: 'value', text: 'Metric Value' }
+          ];
+        } else {
+          columns = [
+            { key: 'label', text: isSector ? 'Industry Sector Focus' : 'Socio-Income Bracket / Cohort' },
+            { key: 'value', text: isSector ? 'Global Share (%)' : 'Consumption Per Capita (Tons/Yr)' }
+          ];
+        }
+
+        columns.forEach(col => {
+          const th = document.createElement('th');
+          th.textContent = col.text;
+          th.setAttribute("role", "columnheader");
+          th.setAttribute("scope", "col");
+          th.setAttribute("tabindex", "0");
+          
+          if (STATE.sortField === col.key) {
+            th.classList.add('sort-active');
+            if (STATE.sortAsc) {
+              th.classList.add('ascending');
+            }
+          }
+
+          th.addEventListener('click', () => {
+            toggleSort(col.key);
+          });
+          th.addEventListener('keypress', (e) => {
+            if (e.key === ' ' || e.key === 'Enter') {
+              e.preventDefault();
+              toggleSort(col.key);
+            }
+          });
+
+          headers.appendChild(th);
+        });
+
+        let rawRows;
+        if (isCompare) {
+          rawRows = [
+            ...MOCK_DB.datasets.sector.map(d => ({ ...d, type: 'Global Sector Share (%)' })),
+            ...MOCK_DB.datasets.income.map(d => ({ ...d, type: 'Sovereign Per Capita (Tons)' }))
+          ];
+        } else {
+          rawRows = [...MOCK_DB.datasets[STATE.activeDataset]];
+        }
+
+        rawRows.sort((a,b) => {
+          let fieldA = a[STATE.sortField];
+          let fieldB = b[STATE.sortField];
+          
+          if (fieldA === undefined) fieldA = '';
+          if (fieldB === undefined) fieldB = '';
+
+          if (typeof fieldA === 'string') {
+            return STATE.sortAsc ? fieldA.localeCompare(fieldB) : fieldB.localeCompare(fieldA);
+          } else {
+            return STATE.sortAsc ? fieldA - fieldB : fieldB - fieldA;
+          }
+        });
+
+        rawRows.forEach((row, rowIndex) => {
+          const tr = document.createElement('tr');
+          tr.setAttribute("data-testid", `table-row-${rowIndex}`);
+
+          const tdLabel = document.createElement('td');
+          const labelSpan = document.createElement('span');
+          labelSpan.className = 'category-tooltip-trigger';
+          labelSpan.textContent = row.label;
+          labelSpan.setAttribute('tabindex', '0');
+          labelSpan.setAttribute('role', 'button');
+          labelSpan.setAttribute('aria-haspopup', 'true');
+          labelSpan.setAttribute('aria-label', `${row.label}, view category context`);
+          
+          if (row.description) {
+            const showTooltip = (e) => {
+              const tooltip = document.getElementById('table-row-tooltip');
+              if (!tooltip) return;
+              tooltip.textContent = row.description;
+              tooltip.classList.add('visible');
+              tooltip.setAttribute('aria-hidden', 'false');
+              
+              const rect = labelSpan.getBoundingClientRect();
+              const tooltipWidth = tooltip.offsetWidth || 220;
+              const tooltipHeight = tooltip.offsetHeight || 40;
+              
+              const scrollY = window.scrollY || window.pageYOffset;
+              const scrollX = window.scrollX || window.pageXOffset;
+              
+              // Position above the centered text label span
+              const left = rect.left + scrollX + (rect.width / 2) - (tooltipWidth / 2);
+              const top = rect.top + scrollY - tooltipHeight - 8;
+              
+              tooltip.style.left = `${Math.max(10, left)}px`;
+              tooltip.style.top = `${Math.max(10, top)}px`;
+            };
+
+            const hideTooltip = () => {
+              const tooltip = document.getElementById('table-row-tooltip');
+              if (!tooltip) return;
+              tooltip.classList.remove('visible');
+              tooltip.setAttribute('aria-hidden', 'true');
+            };
+
+            labelSpan.addEventListener('mouseenter', showTooltip);
+            labelSpan.addEventListener('focus', showTooltip);
+            labelSpan.addEventListener('mouseleave', hideTooltip);
+            labelSpan.addEventListener('blur', hideTooltip);
+          }
+          
+          tdLabel.appendChild(labelSpan);
+          tr.appendChild(tdLabel);
+
+          if (isCompare) {
+            const tdType = document.createElement('td');
+            tdType.style.fontSize = '9pt';
+            tdType.style.color = 'var(--text-medium-grey)';
+            tdType.textContent = row.type;
+            tr.appendChild(tdType);
+          }
+
+          const tdValue = document.createElement('td');
+          tdValue.style.fontWeight = 'bold';
+          if (isCompare) {
+            tdValue.textContent = row.type.includes('%') ? `${row.value}%` : `${row.value} Tons/cap`;
+          } else {
+            tdValue.textContent = isSector ? `${row.value}%` : `${row.value} Tons/capita`;
+          }
+          tr.appendChild(tdValue);
+
+          body.appendChild(tr);
+        });
+      }
+
+      function toggleSort(field) {
+        if (STATE.sortField === field) {
+          STATE.sortAsc = !STATE.sortAsc;
+        } else {
+          STATE.sortField = field;
+          STATE.sortAsc = false;
+        }
+        renderMacroTable();
+      }
+
+      window.downloadMacroCSV = function() {
+        const isSector = STATE.activeDataset === 'sector';
+        const isCompare = STATE.activeDataset === 'compare';
+        
+        let rawRows;
+        if (isCompare) {
+          rawRows = [
+            ...MOCK_DB.datasets.sector.map(d => ({ ...d, type: 'Global Sector Share (%)' })),
+            ...MOCK_DB.datasets.income.map(d => ({ ...d, type: 'Sovereign Per Capita (Tons)' }))
+          ];
+        } else {
+          rawRows = [...MOCK_DB.datasets[STATE.activeDataset]];
+        }
+
+        // Sort identical to renderMacroTable sort order
+        rawRows.sort((a,b) => {
+          let fieldA = a[STATE.sortField];
+          let fieldB = b[STATE.sortField];
+          
+          if (fieldA === undefined) fieldA = '';
+          if (fieldB === undefined) fieldB = '';
+
+          if (typeof fieldA === 'string') {
+            return STATE.sortAsc ? fieldA.localeCompare(fieldB) : fieldB.localeCompare(fieldA);
+          } else {
+            return STATE.sortAsc ? fieldA - fieldB : fieldB - fieldA;
+          }
+        });
+
+        // Construct CSV representation
+        let csvContent = "";
+        if (isCompare) {
+          csvContent += "Category,Dataset Dimension,Metric Value,Description\r\n";
+          rawRows.forEach(row => {
+            const label = `"${row.label.replace(/"/g, '""')}"`;
+            const type = `"${row.type.replace(/"/g, '""')}"`;
+            const value = row.type.includes('%') ? `"${row.value}%"` : `"${row.value} Tons/cap"`;
+            const desc = `"${(row.description || '').replace(/"/g, '""')}"`;
+            csvContent += `${label},${type},${value},${desc}\r\n`;
+          });
+        } else {
+          const valueHeader = isSector ? "Global Share (%)" : "Consumption Per Capita (Tons/Yr)";
+          csvContent += `Category,${valueHeader},Description\r\n`;
+          rawRows.forEach(row => {
+            const label = `"${row.label.replace(/"/g, '""')}"`;
+            const value = isSector ? `"${row.value}%"` : `"${row.value} Tons"`;
+            const desc = `"${(row.description || '').replace(/"/g, '""')}"`;
+            csvContent += `${label},${value},${desc}\r\n`;
+          });
+        }
+
+        // Create browser-initiated secure client download blob
+        const filename = `carbontrust_macro_${STATE.activeDataset}.csv`;
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        
+        const link = document.createElement("a");
+        if (link.download !== undefined) {
+          const url = URL.createObjectURL(blob);
+          link.setAttribute("href", url);
+          link.setAttribute("download", filename);
+          link.style.visibility = 'hidden';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        } else {
+          alert(`CSV Export block:\n\n${csvContent}`);
+        }
+      };
+
+      // MODULE 5: PROGRESSIVE DISCLOSURE MODAL PANEL
+      window.openModal = function(caseKey) {
+        STATE.focusedElementBeforeModal = document.activeElement;
+        STATE.activeModal = caseKey;
+
+        const caseData = MOCK_DB.caseStudies[caseKey];
+        const modal = document.getElementById('case-modal');
+        const container = document.getElementById('modal-container-elem');
+        const titleText = document.getElementById('modal-title-text');
+        const bodyContent = document.getElementById('modal-body-content');
+
+        // Dynamic content population with safe text escapes
+        titleText.textContent = caseData.title;
+
+        bodyContent.innerHTML = ''; // Fresh DOM nodes build to avoid parse errors
+        
+        const resultsHeader = document.createElement('h4');
+        resultsHeader.textContent = "Empirical Audited Result";
+        bodyContent.appendChild(resultsHeader);
+
+        const resultsVal = document.createElement('p');
+        resultsVal.style.fontWeight = '700';
+        resultsVal.style.color = '#0F9D58';
+        resultsVal.style.fontSize = '12pt';
+        resultsVal.textContent = caseData.results;
+        bodyContent.appendChild(resultsVal);
+
+        const contextHeader = document.createElement('h4');
+        contextHeader.textContent = "Strategy & Scope Implementation";
+        bodyContent.appendChild(contextHeader);
+
+        const contextVal = document.createElement('p');
+        contextVal.textContent = caseData.section1;
+        bodyContent.appendChild(contextVal);
+
+        const detailHeader = document.createElement('h4');
+        detailHeader.textContent = "Quantitative Long-term Effects";
+        bodyContent.appendChild(detailHeader);
+
+        const detailVal = document.createElement('p');
+        detailVal.textContent = caseData.section2;
+        bodyContent.appendChild(detailVal);
+
+        // Turn on modal overlays
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Stop secondary window scrolls
+
+        // Focus trap initial controller
+        const dismissBtn = document.getElementById('modal-close-ctrl');
+        dismissBtn.focus();
+
+        // Register global keyboard traps (Escape to close, Tabs wrapper)
+        document.addEventListener('keydown', handleModalKeys);
+      };
+
+      window.closeModal = function() {
+        const modal = document.getElementById('case-modal');
+        modal.classList.remove('active');
+        document.body.style.overflow = ''; // Resume scrolling limits
+
+        document.removeEventListener('keydown', handleModalKeys);
+        STATE.activeModal = null;
+
+        // Restore user focus to direct origin target
+        if (STATE.focusedElementBeforeModal) {
+          STATE.focusedElementBeforeModal.focus();
+        }
+      };
+
+       window.closeModalOutside = function(event) {
+        if (event.target === document.getElementById('case-modal')) {
+          closeModal();
+        }
+      };
+
+      // GLOSSARY MODAL CONTROLLER
+      window.openGlossary = function() {
+        STATE.focusedElementBeforeModal = document.activeElement;
+        STATE.activeModal = 'glossary';
+
+        const modal = document.getElementById('glossary-modal');
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+
+        const dismissBtn = document.getElementById('glossary-close-ctrl');
+        dismissBtn.focus();
+
+        document.addEventListener('keydown', handleGlossaryKeys);
+      };
+
+      window.closeGlossary = function() {
+        const modal = document.getElementById('glossary-modal');
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+
+        document.removeEventListener('keydown', handleGlossaryKeys);
+        STATE.activeModal = null;
+
+        if (STATE.focusedElementBeforeModal) {
+          STATE.focusedElementBeforeModal.focus();
+        }
+      };
+
+      window.closeGlossaryOutside = function(event) {
+        if (event.target === document.getElementById('glossary-modal')) {
+          closeGlossary();
+        }
+      };
+
+      function handleGlossaryKeys(e) {
+        if (e.key === 'Escape') {
+          closeGlossary();
+          return;
+        }
+
+        if (e.key === 'Tab') {
+          const container = document.getElementById('glossary-container-elem');
+          const focusables = container.querySelectorAll('button, [tabindex="0"]');
+          const firstElem = focusables[0];
+          const lastElem = focusables[focusables.length - 1];
+
+          if (e.shiftKey) {
+            if (document.activeElement === firstElem) {
+              lastElem.focus();
+              e.preventDefault();
+            }
+          } else {
+            if (document.activeElement === lastElem) {
+              firstElem.focus();
+              e.preventDefault();
+            }
+          }
+        }
+      }
+
+      function handleModalKeys(e) {
+        if (e.key === 'Escape') {
+          closeModal();
+          return;
+        }
+
+        if (e.key === 'Tab') {
+          const container = document.getElementById('modal-container-elem');
+          const focusables = container.querySelectorAll('button, [tabindex="0"]');
+          const firstElem = focusables[0];
+          const lastElem = focusables[focusables.length - 1];
+
+          if (e.shiftKey) {
+            if (document.activeElement === firstElem) {
+              lastElem.focus();
+              e.preventDefault();
+            }
+          } else {
+            if (document.activeElement === lastElem) {
+              firstElem.focus();
+              e.preventDefault();
+            }
+          }
+        }
+      }
+
+      // INTERACTIVE CIRCULAR ECONOMY ENGINE
+      window.updateCircularLoop = function() {
+        const slider = document.getElementById('recycled-slider');
+        if (!slider) return;
+        
+        const ratio = parseInt(slider.value, 10);
+        STATE.circularRatio = ratio;
+        
+        // Update label text
+        document.getElementById('recycled-val-text').textContent = ratio;
+        
+        // Compute emissions savings based on ratios and selected active stage
+        let multiplier = 0.7; // Stage 1 Design & Materials
+        if (STATE.circularStage === 2) {
+          multiplier = 0.5; // Stage 2 Clean Manufacture
+        } else if (STATE.circularStage === 3) {
+          multiplier = 0.9; // Stage 3 System Re-entry
+        }
+        
+        const totalSavingsPct = Math.round(ratio * multiplier);
+        document.getElementById('circ-savings-pct').textContent = `${totalSavingsPct}% Saved`;
+        
+        // Dynamic textual explanation update
+        const explain = document.getElementById('circ-explain-text');
+        if (STATE.circularStage === 1) {
+          explain.textContent = `At ${ratio}% recycled content: substituting virgin oil-derived materials with circular, bio-based feedstocks directly reduces raw upstream Scope 3 extraction and logistics emissions by ${totalSavingsPct}%.`;
+        } else if (STATE.circularStage === 2) {
+          explain.textContent = `At ${ratio}% recycling process optimization: integrating circular byproducts back into fabrication tracks and leveraging 100% renewable power grids cuts manufacturing-phase Scope 3 electricity loads by ${totalSavingsPct}%.`;
+        } else {
+          explain.textContent = `At ${ratio}% closed-loop recovery: implementing structured customer buy-back and community disassembly systems routes products away from municipal waste sites, slashing downstream Scope 3 landfill carbon by ${totalSavingsPct}%.`;
+        }
+        
+        // Dynamic styling updates on SVG track & animated particles
+        const flowPath = document.getElementById('circ-flow-path');
+        const particle1 = document.getElementById('circ-particle-1');
+        const particle2 = document.getElementById('circ-particle-2');
+        const particle3 = document.getElementById('circ-particle-3');
+        
+        // Color transition based on recycling intensity
+        let accentColor = 'var(--primary-brand)'; // standard primary blue
+        if (ratio < 30) {
+          accentColor = '#EB5757'; // warning red for linear/leaking throughputs
+        } else if (ratio > 75) {
+          accentColor = 'var(--success-green)'; // success green for high-circularity loops
+        }
+        
+        // Update track dash completion to visually close the loop
+        if (flowPath) {
+          flowPath.setAttribute('stroke', accentColor);
+          const baseCircumference = 340; 
+          const dashValue = (ratio / 100) * baseCircumference;
+          flowPath.setAttribute('stroke-dasharray', `${dashValue} ${baseCircumference - dashValue}`);
+        }
+        
+        // Speed up flows for high percentages
+        const duration = ratio > 0 ? Math.max(1.8, 10 - (ratio / 12)) : 0;
+        
+        [particle1, particle2, particle3].forEach((p) => {
+          if (p) {
+            p.setAttribute('fill', accentColor);
+            if (duration === 0) {
+              p.style.animationPlayState = 'paused';
+              p.style.opacity = '0';
+            } else {
+              p.style.animationPlayState = 'running';
+              p.style.animationDuration = `${duration}s`;
+              p.style.opacity = '1';
+            }
+          }
+        });
+      };
+
+      window.selectCircStage = function(element, stageNum) {
+        // Clear previous active buttons
+        const buttons = document.querySelectorAll('.circ-stage-btn');
+        buttons.forEach(btn => {
+          btn.classList.remove('active');
+          btn.setAttribute('aria-checked', 'false');
+        });
+        
+        // Set clicked button to active
+        if (element) {
+          element.classList.add('active');
+          element.setAttribute('aria-checked', 'true');
+        } else {
+          const btnElem = document.getElementById(`cstage-btn-${stageNum}`);
+          if (btnElem) {
+            btnElem.classList.add('active');
+            btnElem.setAttribute('aria-checked', 'true');
+          }
+        }
+        
+        STATE.circularStage = stageNum;
+        
+        // Update SVG node sizing & color accents
+        for (let i = 1; i <= 3; i++) {
+          const node = document.getElementById(`circ-node-${i}`);
+          if (node) {
+            if (i === stageNum) {
+              node.setAttribute('fill', 'var(--primary-brand)');
+              node.setAttribute('class', 'circ-node-circle active');
+              node.setAttribute('r', '15');
+            } else {
+              node.setAttribute('fill', 'var(--text-medium-grey)');
+              node.setAttribute('class', 'circ-node-circle');
+              node.setAttribute('r', '10');
+            }
+          }
+        }
+        
+        // Trigger recalculation and rendering updates
+        updateCircularLoop();
+      };
+
+      window.clickCircNode = function(stageNum) {
+        selectCircStage(null, stageNum);
+      };
+
+      // INTERACTIVE ACCORDION ENGINE
+      window.toggleAccordion = function(element) {
+        const item = element.closest('.accordion-item');
+        const isExpanded = element.getAttribute('aria-expanded') === 'true';
+        const panel = item.querySelector('.accordion-panel');
+        
+        if (isExpanded) {
+          element.setAttribute('aria-expanded', 'false');
+          item.classList.remove('active');
+          panel.style.maxHeight = '0px';
+        } else {
+          // Close all other active accordion panels for unified modern accordion experience
+          const allItems = document.querySelectorAll('.accordion-item');
+          allItems.forEach(otherItem => {
+            if (otherItem !== item) {
+              const otherBtn = otherItem.querySelector('.accordion-trigger');
+              const otherPanel = otherItem.querySelector('.accordion-panel');
+              if (otherBtn) otherBtn.setAttribute('aria-expanded', 'false');
+              otherItem.classList.remove('active');
+              if (otherPanel) {
+                otherPanel.style.maxHeight = '0px';
+              }
+            }
+          });
+
+          element.setAttribute('aria-expanded', 'true');
+          item.classList.add('active');
+          panel.style.maxHeight = panel.scrollHeight + "px";
+        }
+      };
+
+      // RETENTION & NAVIGATION READING PROGRESS TRACKER
+      window.addEventListener('scroll', () => {
+        const scrollPosition = window.scrollY;
+        const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progressPercentage = (scrollPosition / documentHeight) * 100;
+        
+        document.getElementById('reading-progress').style.width = `${progressPercentage}%`;
+
+        // Back to Top FAB Visibility Toggle (appears when scrolling past first section (~350px))
+        const backToTopFab = document.getElementById('back-to-top-fab');
+        if (backToTopFab) {
+          if (scrollPosition > 350) {
+            backToTopFab.classList.add('visible');
+          } else {
+            backToTopFab.classList.remove('visible');
+          }
+        }
+      }, { passive: true });
+
+      // Smooth scroll back to top handler
+      window.scrollToTop = function() {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      };
+
+      // INTERACTIVE CONCEPT CHECK QUIZ ENGINE
+      window.renderQuiz = function() {
+        const container = document.getElementById('quiz-container-elem');
+        if (!container) return;
+
+        // If completed all questions, render Final Summary score panel
+        if (STATE.quizCurrentIdx >= QUIZ_QUESTIONS.length) {
+          let encouragingMsg = "";
+          if (STATE.quizScore === QUIZ_QUESTIONS.length) {
+            encouragingMsg = "Excellent work! You have fully mastered direct, indirect, and value chain carbon auditing standards.";
+          } else if (STATE.quizScore >= 1) {
+            encouragingMsg = "Good effort! Review the definitions in sections above and the core glossary to hone your environmental accounting skills further.";
+          } else {
+            encouragingMsg = "Let's review! Re-examine key scopes, GWP calculations, and regulatory frameworks to strengthen your understanding, then try again.";
+          }
+
+          container.innerHTML = `
+            <div id="quiz-results-id" class="quiz-results-panel animate-on-scroll appear">
+              <div class="quiz-results-score-badge" aria-label="Score banner">
+                <span class="quiz-results-score-value">${STATE.quizScore}/${QUIZ_QUESTIONS.length}</span>
+                <span class="quiz-results-score-label">Score</span>
+              </div>
+              <h3 class="quiz-results-heading">Knowledge Check Complete!</h3>
+              <p class="quiz-results-text">${encouragingMsg}</p>
+              <button class="quiz-action-button" onclick="restartQuiz()" id="quiz-restart-btn" data-testid="quiz-restart-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin-right: 6px; display: inline-block; vertical-align: middle;">
+                  <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+                </svg>
+                Restart Quiz
+              </button>
+            </div>
+          `;
+          return;
+        }
+
+        // Otherwise render active question
+        const q = QUIZ_QUESTIONS[STATE.quizCurrentIdx];
+
+        // Generate status elements: dots and title
+        let dotsHTML = '';
+        for (let i = 0; i < QUIZ_QUESTIONS.length; i++) {
+          let dotClass = 'quiz-indicator-dot';
+          if (i === STATE.quizCurrentIdx) {
+            dotClass += ' active';
+          } else {
+            const answerState = STATE.quizAnswersState[i];
+            if (answerState === 'correct') {
+              dotClass += ' correct';
+            } else if (answerState === 'incorrect') {
+              dotClass += ' incorrect';
+            }
+          }
+          dotsHTML += `<div class="${dotClass}" aria-label="Step ${i+1}"></div>`;
+        }
+
+        // Generate options list
+        let optionsHTML = '';
+        q.options.forEach((opt, idx) => {
+          const letter = String.fromCharCode(65 + idx); // A, B, C
+          let btnClass = 'quiz-option-button';
+          let ariaChecked = 'false';
+
+          if (STATE.quizAnswered) {
+            btnClass += ' locked';
+            if (idx === q.correctIndex) {
+              btnClass += ' is-correct';
+              if (STATE.quizSelectedOpt === idx) {
+                ariaChecked = 'true';
+              }
+            } else if (STATE.quizSelectedOpt === idx) {
+              btnClass += ' is-incorrect';
+              ariaChecked = 'true';
+            }
+          } else if (STATE.quizSelectedOpt === idx) {
+            btnClass += ' selected';
+            ariaChecked = 'true';
+          }
+
+          optionsHTML += `
+            <button class="${btnClass}" onclick="selectQuizOption(${idx})" role="radio" aria-checked="${ariaChecked}" id="quiz-opt-${idx}" data-testid="quiz-option-${idx}" ${STATE.quizAnswered ? 'disabled' : ''}>
+              <span class="quiz-option-letter">${letter}</span>
+              <span class="quiz-option-text">${opt}</span>
+            </button>
+          `;
+        });
+
+        // Safe status message & feedback panels
+        let feedbackHTML = '';
+        if (STATE.quizAnswered) {
+          const isCorrect = STATE.quizSelectedOpt === q.correctIndex;
+          const statusClass = isCorrect ? 'success' : 'error';
+          const headerText = isCorrect ? 'Correct Answer!' : 'Incorrect Answer';
+          const icon = isCorrect 
+            ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color: var(--success-green);"><polyline points="20 6 9 17 4 12"></polyline></svg>`
+            : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color: #D93025;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
+
+          const nextButtonText = STATE.quizCurrentIdx === QUIZ_QUESTIONS.length - 1 ? 'Finish and View Results' : 'Next Question';
+
+          feedbackHTML = `
+            <div class="quiz-feedback-panel visible" id="quiz-feedback" role="alert" aria-live="polite">
+              <div class="quiz-feedback-header ${statusClass}">
+                ${icon}
+                <span>${headerText}</span>
+              </div>
+              <p class="quiz-feedback-explanation">${q.explanation}</p>
+              <button class="quiz-action-button" onclick="nextQuizQuestion()" id="quiz-next-btn" data-testid="quiz-next-btn">
+                <span>${nextButtonText}</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: inline-block; vertical-align: middle; margin-left: 4px;">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </button>
+            </div>
+          `;
+        } else {
+          // If option is selected but not submitted, show the "Submit Answer" button
+          const isDisabled = STATE.quizSelectedOpt === null;
+          feedbackHTML = `
+            <div style="display: flex; justify-content: flex-start; margin-top: 16px;">
+              <button class="quiz-action-button" onclick="submitQuizAnswer()" id="quiz-submit-btn" data-testid="quiz-submit-btn" ${isDisabled ? 'style="opacity: 0.5; cursor: not-allowed;" disabled' : ''}>
+                <span>Submit Answer</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: inline-block; vertical-align: middle; margin-left: 4px;">
+                  <polyline points="9 11 12 14 22 4"></polyline>
+                  <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                </svg>
+              </button>
+            </div>
+          `;
+        }
+
+        container.innerHTML = `
+          <div class="quiz-header-status">
+            <span class="quiz-progress-info">Question ${STATE.quizCurrentIdx + 1} of ${QUIZ_QUESTIONS.length}</span>
+            <div class="quiz-progress-indicators" role="presentation">
+              ${dotsHTML}
+            </div>
+          </div>
+          <div class="quiz-question-box">
+            <p class="quiz-question-text" id="quiz-question-text-id">${q.question}</p>
+          </div>
+          <div class="quiz-options-grid" role="radiogroup" aria-labelledby="quiz-question-text-id">
+            ${optionsHTML}
+          </div>
+          ${feedbackHTML}
+        `;
+      };
+
+      window.selectQuizOption = function(idx) {
+        if (STATE.quizAnswered) return;
+        STATE.quizSelectedOpt = idx;
+        renderQuiz();
+      };
+
+      window.submitQuizAnswer = function() {
+        if (STATE.quizAnswered || STATE.quizSelectedOpt === null) return;
+        
+        STATE.quizAnswered = true;
+        const q = QUIZ_QUESTIONS[STATE.quizCurrentIdx];
+        const isCorrect = STATE.quizSelectedOpt === q.correctIndex;
+        
+        if (isCorrect) {
+          STATE.quizScore++;
+          STATE.quizAnswersState[STATE.quizCurrentIdx] = 'correct';
+        } else {
+          STATE.quizAnswersState[STATE.quizCurrentIdx] = 'incorrect';
+        }
+
+        renderQuiz();
+      };
+
+      window.nextQuizQuestion = function() {
+        STATE.quizCurrentIdx++;
+        STATE.quizSelectedOpt = null;
+        STATE.quizAnswered = false;
+        renderQuiz();
+      };
+
+      window.restartQuiz = function() {
+        STATE.quizCurrentIdx = 0;
+        STATE.quizSelectedOpt = null;
+        STATE.quizAnswered = false;
+        STATE.quizScore = 0;
+        STATE.quizAnswersState = new Array(QUIZ_QUESTIONS.length).fill(null);
+        renderQuiz();
+      };
+
+      // SCROLL INTERSECTION OBSERVER ANIMATION ENGINE
+      function initScrollAnimations() {
+        const cards = document.querySelectorAll('.animate-on-scroll');
+        
+        if (!window.IntersectionObserver) {
+          // Graceful fallback for non-supporting browsers
+          cards.forEach(card => card.classList.add('appear'));
+          return;
+        }
+
+        const observerOptions = {
+          root: null,
+          rootMargin: '0px 0px -40px 0px',
+          threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('appear');
+              observer.unobserve(entry.target); // Stop tracking animated cards
+            }
+          });
+        }, observerOptions);
+
+        cards.forEach(card => observer.observe(card));
+      }
+
+      // INITIAL ASSEMBLY LOOP
+      window.addEventListener('DOMContentLoaded', () => {
+        initTableTooltip();
+        updateGwpCascade();
+        toggleScopeTab('scope1', 0);
+        renderMacroTable();
+        renderMacroChart();
+        updateCircularLoop();
+        initScrollAnimations();
+        restartQuiz(); // Initializes quiz status array and renders the first question on screen
+
+        // Responsive chart redraw
+        window.addEventListener('resize', () => {
+          renderMacroChart();
+        }, { passive: true });
+      });
+
+    })();
+  </script>
+</body>
+</html>

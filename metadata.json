@@ -1,0 +1,6 @@
+{
+  "name": "Carbon Footprint Awareness Platform",
+  "description": "An immersive Material 3 educational platform exploring carbon accounting, emissions scopes, macroeconomic global data, and mitigation pathways without calculators.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
